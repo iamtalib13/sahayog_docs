@@ -10,14 +10,14 @@
  "field_order": [
   "please_select_doc",
   "circular_doc",
+  "column_break_vmsbh",
+  "date",
+  "year",
   "section_break_1yapg",
   "circular_id",
   "column_break_o1eua",
   "circular_name",
-  "section_break_6gg2a",
-  "year",
-  "column_break_g5m4a",
-  "date"
+  "upload_doc"
  ],
  "fields": [
   {
@@ -37,12 +37,8 @@
    "reqd": 1
   },
   {
-   "fieldname": "column_break_g5m4a",
-   "fieldtype": "Column Break"
-  },
-  {
    "fieldname": "date",
-   "fieldtype": "Data",
+   "fieldtype": "Date",
    "label": "Date",
    "reqd": 1
   },
@@ -55,11 +51,8 @@
    "fieldtype": "Data",
    "in_standard_filter": 1,
    "label": "Circular Name",
+   "read_only": 1,
    "reqd": 1
-  },
-  {
-   "fieldname": "section_break_6gg2a",
-   "fieldtype": "Section Break"
   },
   {
    "fieldname": "column_break_o1eua",
@@ -70,6 +63,7 @@
    "fieldtype": "Data",
    "in_standard_filter": 1,
    "label": "Circular ID",
+   "read_only": 1,
    "reqd": 1
   },
   {
@@ -77,12 +71,22 @@
    "fieldname": "please_select_doc",
    "fieldtype": "Heading",
    "label": "Please Select Doc"
+  },
+  {
+   "fieldname": "column_break_vmsbh",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "upload_doc",
+   "fieldtype": "Button",
+   "hidden": 1,
+   "label": "Upload Doc"
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-05-27 13:09:57.923010",
+ "modified": "2024-05-27 15:50:55.802603",
  "modified_by": "Administrator",
  "module": "Circulars",
  "name": "Circular",

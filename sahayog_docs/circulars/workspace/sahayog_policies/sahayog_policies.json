@@ -1,0 +1,41 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"_TdbnJqMsr\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Sahayog Policies</span>\",\"col\":12}},{\"id\":\"lK1glagHcY\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Circular List\",\"col\":3}}]",
+ "creation": "2024-05-21 17:23:48.624505",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "milestone",
+ "idx": 0,
+ "is_hidden": 0,
+ "label": "Sahayog Policies",
+ "links": [],
+ "modified": "2024-05-27 16:00:47.169932",
+ "modified_by": "Administrator",
+ "module": "Circulars",
+ "name": "Sahayog Policies",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [
+  {
+   "role": "Circular Manager"
+  }
+ ],
+ "sequence_id": 40.0,
+ "shortcuts": [
+  {
+   "color": "Green",
+   "doc_view": "List",
+   "label": "Circular List",
+   "link_to": "Circular",
+   "stats_filter": "[]",
+   "type": "DocType"
+  }
+ ],
+ "title": "Sahayog Policies"
+}
