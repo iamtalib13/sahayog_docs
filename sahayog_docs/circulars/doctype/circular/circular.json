@@ -77,16 +77,16 @@
    "fieldtype": "Column Break"
   },
   {
+   "description": "file path",
    "fieldname": "upload_doc",
    "fieldtype": "Button",
-   "hidden": 1,
    "label": "Upload Doc"
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-05-27 15:50:55.802603",
+ "modified": "2024-05-27 17:55:00.187586",
  "modified_by": "Administrator",
  "module": "Circulars",
  "name": "Circular",

@@ -2,7 +2,8 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Circular", {
-  before_save: function (frm) {
+  before_save: function (frm) {},
+  refresh: function (frm) {
     if (frm.is_new()) {
       if (
         frappe.user.has_role("Circular Manager") ||
@@ -49,8 +50,7 @@ frappe.ui.form.on("Circular", {
         }
       }
     }
-  },
-  refresh: function (frm) {
+
     if (frm.is_new()) {
       frm.set_df_property("year", "read_only", 1);
     } else if (!frm.is_new()) {
@@ -63,12 +63,7 @@ frappe.ui.form.on("Circular", {
 
   circular_doc: function (frm) {},
   upload_doc: function (frm) {
-    if (
-      frappe.user.has_role("Circular Manager") ||
-      frappe.user.has_role("System Manager")
-    ) {
-      uploadFile(frm);
-    }
+    uploadFile(frm);
   },
 });
 function uploadFile(frm) {
@@ -85,6 +80,11 @@ function uploadFile(frm) {
     on_success(file, response) {
       frappe.msgprint(`Server response: ${response.message}`, "Message"); // Log the response for debugging
 
+      frm.set_df_property(
+        "upload_doc",
+        "description",
+        "<b style='color:darkgreen;'>Path:/year/2024-25</b>"
+      );
       frappe.show_alert(
         {
           message: __("File uploaded."),
