@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"_TdbnJqMsr\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Sahayog Policies</span>\",\"col\":12}},{\"id\":\"lK1glagHcY\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Circular List\",\"col\":3}}]",
+ "content": "[{\"id\":\"_TdbnJqMsr\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Sahayog Policies</span>\",\"col\":12}},{\"id\":\"lK1glagHcY\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Circular List\",\"col\":3}},{\"id\":\"ykOZtlkT7X\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Portal\",\"col\":3}},{\"id\":\"mAusktVZRv\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"J7yRSedbo6\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"2018-19\",\"col\":3}},{\"id\":\"NIaIjUVsxR\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"2019-20\",\"col\":3}},{\"id\":\"zFQVpLRzAu\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"2020-21\",\"col\":3}},{\"id\":\"2kU6GjyDso\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"2021-22\",\"col\":3}},{\"id\":\"aXFxqWsRv_\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"2022-23\",\"col\":3}},{\"id\":\"OtprWzwMsu\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"2023-24\",\"col\":3}},{\"id\":\"Upptvh1gzC\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"2024-25\",\"col\":3}}]",
  "creation": "2024-05-21 17:23:48.624505",
  "custom_blocks": [],
  "docstatus": 0,
@@ -12,7 +12,7 @@
  "is_hidden": 0,
  "label": "Sahayog Policies",
  "links": [],
- "modified": "2024-05-27 16:00:47.169932",
+ "modified": "2024-06-14 16:51:49.618324",
  "modified_by": "Administrator",
  "module": "Circulars",
  "name": "Sahayog Policies",
@@ -29,9 +29,72 @@
  "sequence_id": 40.0,
  "shortcuts": [
   {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Portal",
+   "type": "URL",
+   "url": "http://10.52.10.14/policies"
+  },
+  {
    "color": "Green",
    "doc_view": "List",
    "label": "Circular List",
+   "link_to": "Circular",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "2018-19",
+   "link_to": "Circular",
+   "stats_filter": "[[\"Circular\",\"year\",\"=\",\"2018-19\",false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "2019-20",
+   "link_to": "Circular",
+   "stats_filter": "[[\"Circular\",\"year\",\"=\",\"2019-20\",false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "2020-21",
+   "link_to": "Circular",
+   "stats_filter": "[[\"Circular\",\"year\",\"=\",\"2020-21\",false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "2021-22",
+   "link_to": "Circular",
+   "stats_filter": "[[\"Circular\",\"year\",\"=\",\"2021-22\",false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "2022-23",
+   "link_to": "Circular",
+   "stats_filter": "[[\"Circular\",\"year\",\"=\",\"2022-23\",false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "2023-24",
+   "link_to": "Circular",
+   "stats_filter": "[[\"Circular\",\"year\",\"=\",\"2023-24\",false]]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "2024-25",
    "link_to": "Circular",
    "stats_filter": "[]",
    "type": "DocType"

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Policy</title>
+    <link rel="icon" href="/files/logo.png" type="image/x-icon" />
+
+    <script src="assets/sahayog_docs/js/htmx.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script
+      src="https://unpkg.com/htmx.org@1.9.12"
+      integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2"
+      crossorigin="anonymous"
+    ></script>
+    <!-- Poppins font import -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+      crossorigin="anonymous"
+    />
+    <!-- <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    /> -->
+    <style>
+      .card-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+      }
+
+      .card-text {
+        font-size: 0.9rem;
+      }
+
+      /*.badge {
+        margin-right: 5px;
+      }*/
+      .star-rating {
+        color: gold;
+      }
+
+      .card-img-top {
+        height: 200px;
+        object-fit: cover;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        color: white;
+        background-color: #0f0f0f;
+        font-size: 1rem;
+        line-height: 1.5rem;
+        font-weight: 400;
+        margin: 0;
+      }
+
+      #sidebar {
+        background-color: #161515;
+        width: 250px;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        padding: 15px;
+        overflow-y: auto;
+        z-index: 1;
+      }
+
+      #header {
+        width: calc(100% - 250px);
+        position: fixed;
+        top: 0;
+        left: 250px;
+        padding: 10px 20px;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        z-index: 2;
+        background-color: #0f0f0f;
+      }
+
+      #filter-bar {
+        display: flex;
+        top: 50px;
+        left: 250px;
+        padding: 10px 15px;
+        z-index: 3;
+        background-color: #0f0f0f;
+      }
+
+      .forms {
+        color: #fff !important;
+      }
+      .forms:hover {
+        color: #000 !important;
+      }
+      button.btn.btn-outline-secondary.btn-filter.active {
+        color: black;
+        background: white;
+      }
+      button.btn.btn-outline-secondary.btn-filter {
+        background: #3f3f3f;
+        color: #fff;
+        border: none;
+      }
+      button.btn.btn-outline-secondary.btn-filter {
+        background: #3f3f3f;
+        color: #fff;
+        border: none;
+        transition: background-color 0.3s ease;
+      }
+
+      button.btn.btn-outline-secondary.btn-filter:hover {
+        background: #5a5a5a; /* Lighter shade for hover effect */
+      }
+
+      button.btn.btn-outline-secondary.btn-filter:active {
+        background: white; /* Same as the default background color */
+        color: #000;
+      }
+
+      /* .btn-group .btn {
+        border-radius: 20px;
+        margin: 5px;
+        color: #333;
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      .btn-group .btn.active {
+        background-color: #fff;
+        color: black;
+        border-color: #007bff;
+      }*/
+
+      #content {
+        margin-left: 250px;
+        margin-top: 80px;
+        width: calc(100% - 250px);
+        padding: 20px;
+        overflow-y: auto;
+        z-index: 0;
+      }
+
+      .nav-link {
+        color: #333;
+      }
+
+      .nav-link:hover {
+        background-color: #e9ecef;
+        color: #000;
+      }
+
+      .nav-link.active {
+        background-color: #007bff;
+        color: #fff;
+      }
+
+      .form-inline .form-control {
+        width: 300px;
+      }
+
+      .navbar-brand {
+        font-weight: 900;
+        font-size: 40px;
+      }
+
+      .card-body {
+        color: #000;
+      }
+
+      .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: none;
+        perspective: 1000px;
+        background: lightgoldenrodyellow;
+      }
+
+      .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      }
+
+      /* .btn-group .btn {
+        border-radius: 20px;
+        border: 1px solid #ccc;
+        padding: 5px 15px;
+        margin: 5px;
+        background-color: #f1f1f1;
+        color: #333;
+        transition: background-color 0.3s, color 0.3s;
+      }
+
+      .btn-group .btn:hover {
+        background-color: #e9e9e9;
+        color: #000;
+      }
+
+      .btn-group .btn.active {
+        background-color: #fff;
+        color: black;
+        border-color: #007bff;
+      }
+
+      .btn-filter.active {
+        background-color: #fff;
+        color: black;
+      }*/
+      .flt_icon {
+        width: 26px;
+        height: 29px;
+      }
+      .flt_heading {
+        font-size: 25px;
+        font-weight: 600;
+      }
+      .logo {
+        width: 230px;
+        height: 51px;
+      }
+      .search_icon {
+        width: 35px;
+        height: 35px;
+      }
+
+      /* Container for the input and button */
+      .search-container {
+        display: flex;
+        align-items: center;
+        position: relative;
+        width: 100%;
+      }
+
+      /* Style the input field */
+      .search-container .form-control {
+        flex: 1;
+        padding-right: 40px; /* Ensure enough space for the button */
+        background: transparent;
+        border-radius: 50px;
+        border-color: #303030;
+      }
+
+      /* Style the button */
+      .search-container .search-btn {
+        background-color: transparent;
+        border: none;
+        position: absolute;
+        right: 5px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+      }
+
+      /* Adjust the size of the icon */
+      .search-container .search_icon {
+        width: 30px;
+        height: 30px;
+      }
+      button.btn.btn-outline-secondary.btn-filter.active span.badge {
+        background: transparent !important;
+        color: #020202;
+      }
+
+      .form-control:focus {
+        box-shadow: none;
+        border-color: #fff;
+        color: #fff;
+      }
+      .dot {
+        width: 5px;
+        height: 5px;
+        background-color: black;
+        border-radius: 50%;
+      }
+      .d-flex {
+        display: flex !important;
+        gap: 8px;
+        align-items: center;
+      }
+    </style>
+    <script>
+      // Function to handle button clicks
+      function handleFilterButtonClick(button) {
+        // Remove active class from all buttons
+        document.querySelectorAll(".btn-filter").forEach((btn) => {
+          btn.classList.remove("active");
+        });
+        // Add active class to the clicked button
+        button.classList.add("active");
+
+        // Check if the clicked button is the "All" button
+        if (button.textContent.trim() === "All") {
+          // Set parameters for fetching all records
+          htmx.ajax(
+            "#doc-list",
+            "get",
+            "/api/method/sahayog_docs.circulars.doctype.circular.circular.get_list"
+          );
+        }
+      }
+    </script>
+  </head>
+
+  <body>
+    {% if frappe.session.user == "Guest" or frappe.session.user != "Guest" %}
+    <nav id="sidebar" class="d-flex flex-column">
+      <div class="navbar-brand">
+        <img class="logo" src="/files/Sahayog.png" alt="" />
+      </div>
+      <ul class="nav flex-column mt-4">
+        <li class="nav-item">
+          <!-- <div class="flt_heading px-2">
+            <span>
+              <img class="flt_icon" src="/files/filter.png" alt="" /> </span
+            >Filters
+          </div> -->
+          <div class="pt-2">
+            {% include "/templates/includes/sidebar_filter.html" %}
+          </div>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link forms" href="#">Forms</a>
+        </li>
+      </ul>
+    </nav>
+    <header id="header">
+      <div id="filter-bar">
+        {% set circular_count = frappe.db.count('Circular', {'type':
+        'Circular'}) %} {% set sop_count = frappe.db.count('Circular', {'type':
+        'SOP'}) %}
+        <div class="rounded-pill" role="group" aria-label="Filter Group">
+          <button
+            type="button"
+            class="btn btn-outline-secondary btn-filter active"
+            hx-get="/api/method/sahayog_docs.circulars.doctype.circular.circular.get_list"
+            hx-target="#doc-list"
+            onclick="handleFilterButtonClick(this)"
+          >
+            All
+            <span class="badge">{{circular_count + sop_count}}</span>
+          </button>
+
+          <button
+            type="button"
+            class="btn btn-outline-secondary btn-filter ms-2"
+            hx-get="/api/method/sahayog_docs.circulars.doctype.circular.circular.get_list"
+            hx-target="#doc-list"
+            hx-params='{"doc_type": "Circular"}'
+            onclick="handleFilterButtonClick(this)"
+          >
+            Circular<span class="badge">{{circular_count}}</span>
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-secondary btn-filter ms-2"
+            hx-get="/api/method/sahayog_docs.circulars.doctype.circular.circular.get_list"
+            hx-target="#doc-list"
+            hx-params='{"doc_type": "SOP"}'
+            onclick="handleFilterButtonClick(this)"
+          >
+            SOP<span class="badge">{{sop_count}}</span>
+          </button>
+        </div>
+
+        <form class="form-inline ms-2">
+          <div class="search-container">
+            <input
+              class="form-control"
+              type="search"
+              placeholder="Search"
+              aria-label="Search"
+            />
+            <button class="btn search-btn" type="submit">
+              <img class="search_icon" src="/files/find.png" alt="search" />
+            </button>
+          </div>
+        </form>
+      </div>
+    </header>
+
+    <div id="content">
+      <div id="selected-filter">Circular</div>
+      <div class="container-fluid">
+        <div class="row" id="doc-list">
+          {% include "/templates/includes/cards.html" %}
+        </div>
+      </div>
+    </div>
+
+    {% else %} {% include "/templates/includes/not-found.html" %} {% endif %}
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+      integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+      integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      document.addEventListener("htmx:configRequest", function (evt) {
+        if (evt.detail.elt.getAttribute("hx-params")) {
+          evt.detail.parameters["doc_type"] = JSON.parse(
+            evt.detail.elt.getAttribute("hx-params")
+          ).doc_type;
+        }
+      });
+    </script>
+  </body>
+</html>

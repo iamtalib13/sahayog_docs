@@ -1,7 +1,6 @@
 {
  "actions": [],
- "allow_rename": 1,
- "autoname": "format:{circular_id}",
+ "autoname": "autoincrement",
  "creation": "2024-05-21 15:59:12.595689",
  "default_view": "List",
  "doctype": "DocType",
@@ -10,14 +9,17 @@
  "field_order": [
   "please_select_doc",
   "circular_doc",
+  "fetch_details",
   "column_break_vmsbh",
   "date",
   "year",
+  "month",
   "section_break_1yapg",
   "circular_id",
   "column_break_o1eua",
   "circular_name",
-  "upload_doc"
+  "upload_doc",
+  "type"
  ],
  "fields": [
   {
@@ -51,7 +53,6 @@
    "fieldtype": "Data",
    "in_standard_filter": 1,
    "label": "Circular Name",
-   "read_only": 1,
    "reqd": 1
   },
   {
@@ -63,7 +64,6 @@
    "fieldtype": "Data",
    "in_standard_filter": 1,
    "label": "Circular ID",
-   "read_only": 1,
    "reqd": 1
   },
   {
@@ -77,20 +77,38 @@
    "fieldtype": "Column Break"
   },
   {
-   "description": "file path",
    "fieldname": "upload_doc",
    "fieldtype": "Button",
+   "hidden": 1,
    "label": "Upload Doc"
+  },
+  {
+   "depends_on": "eval:frappe.user.has_role(\"Circular Manager\") || frappe.user.has_role(\"System Manager\")",
+   "fieldname": "fetch_details",
+   "fieldtype": "Button",
+   "label": "Fetch Details"
+  },
+  {
+   "fieldname": "type",
+   "fieldtype": "Select",
+   "label": "Type",
+   "options": "\nCircular\nSOP"
+  },
+  {
+   "fieldname": "month",
+   "fieldtype": "Select",
+   "label": "month",
+   "options": "\n01\n02\n03\n04\n05\n06\n07\n08\n09\n10\n11\n12"
   }
  ],
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-05-27 17:55:00.187586",
+ "modified": "2024-06-15 12:30:33.763563",
  "modified_by": "Administrator",
  "module": "Circulars",
  "name": "Circular",
- "naming_rule": "Expression",
+ "naming_rule": "Autoincrement",
  "owner": "Administrator",
  "permissions": [
   {
@@ -120,5 +138,6 @@
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
- "title_field": "circular_id"
+ "title_field": "circular_name",
+ "track_changes": 1
 }

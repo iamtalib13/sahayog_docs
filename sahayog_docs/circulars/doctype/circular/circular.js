@@ -2,21 +2,66 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Circular", {
-  before_save: function (frm) {},
+  before_save: function (frm) {
+    let date = frm.doc.date;
+    // Assuming your date field is named 'date'
+    if (date) {
+      let dateObj = new Date(date); // Use 'date' directly, not 'frm.doc.date_field'
+      let month = dateObj.getMonth() + 1; // getMonth() returns zero-based index (0 for January)
+      let monthString = ("0" + month).slice(-2); // Ensure two-digit format ('01' to '12')
+      frm.set_value("month", monthString); // Assuming 'month_field' is where you want to store the month
+    }
+  },
+
   refresh: function (frm) {
     if (frm.is_new()) {
-      if (
-        frappe.user.has_role("Circular Manager") ||
-        frappe.user.has_role("System Manager")
-      ) {
-        console.log("admin");
+      // frm.set_df_property("year", "read_only", 1);
 
-        let file = frm.doc.circular_doc;
-        console.log("file-", file);
+      if (!frappe.user.has_role("Circular Manager")) {
+        frappe.set_route("/app/sahayog-policies");
+        frappe.show_alert(
+          {
+            message: __("Access Denied"),
+            indicator: "red",
+          },
+          5
+        );
+      }
+    } else if (!frm.is_new()) {
+      frm.set_df_property("circular_doc", "read_only", 1);
+      frm.set_df_property("year", "read_only", 0);
+      frm.set_df_property("circular_name", "read_only", 0);
+      frm.set_df_property("circular_id", "read_only", 0);
+    }
+  },
 
-        // Define a regular expression to extract the required components
+  circular_doc: function (frm) {
+    console.log("hello from upload");
+    frm.trigger("capture_doc_details");
+    frm.trigger("capture_doc_details");
+  },
+
+  upload_doc: function (frm) {
+    uploadFile(frm);
+  },
+
+  fetch_details: function (frm) {
+    frm.trigger("capture_doc_details");
+  },
+  capture_doc_details: function (frm) {
+    if (
+      frappe.user.has_role("Circular Manager") ||
+      frappe.user.has_role("System Manager")
+    ) {
+      console.log("admin");
+
+      let file = frm.doc.circular_doc;
+      console.log("file-", file);
+
+      if (file) {
+        // Corrected regular expression to match the filename pattern exactly
         let regex =
-          /Circular No\. (\d+) \((\d{4}-\d{2})\) (.+) Date (\d{2}-\d{2}-\d{4})\.pdf/;
+          /Circular No\. (\d+)\s\((\d{4}-\d{2})\)\s(.+)\sDate\s(\d{2}-\d{2}-\d{4})\.pdf/;
         let match = file.match(regex);
 
         if (match) {
@@ -30,11 +75,9 @@ frappe.ui.form.on("Circular", {
           console.log("File Name:", fileName);
           console.log("Date:", date);
 
-          // Set the extracted date to the form field and refresh the field
-          // frm.set_value("date", date);
-          // frm.refresh_field("date");
+          frm.set_value("date", date);
+          frm.refresh_field("date");
 
-          // Optionally, set other fields as well if needed
           frm.set_value("circular_id", id);
           frm.refresh_field("circular_id");
 
@@ -43,29 +86,16 @@ frappe.ui.form.on("Circular", {
 
           frm.set_value("circular_name", fileName);
           frm.refresh_field("circular_name");
-
-          // You can now use these variables as needed
         } else {
           console.log("Filename does not match the expected pattern");
         }
+      } else {
+        console.log("No circular document provided");
       }
     }
-
-    if (frm.is_new()) {
-      frm.set_df_property("year", "read_only", 1);
-    } else if (!frm.is_new()) {
-      frm.set_df_property("circular_doc", "read_only", 1);
-      frm.set_df_property("year", "read_only", 0);
-      frm.set_df_property("circular_name", "read_only", 0);
-      frm.set_df_property("circular_id", "read_only", 0);
-    }
-  },
-
-  circular_doc: function (frm) {},
-  upload_doc: function (frm) {
-    uploadFile(frm);
   },
 });
+
 function uploadFile(frm) {
   new frappe.ui.FileUploader({
     method: "sahayog_docs.circulars.doctype.circular.circular.capture",
