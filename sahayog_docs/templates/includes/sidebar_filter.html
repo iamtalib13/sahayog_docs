@@ -151,6 +151,16 @@
       // Reset the select fields to their default values
       document.getElementById("yearSelect").selectedIndex = 0;
       document.getElementById("monthSelect").selectedIndex = 0;
+
+      // Remove active class from all filter buttons
+      document.querySelectorAll(".btn-filter").forEach((btn) => {
+        btn.classList.remove("active");
+      });
+
+      // Add active class to the "All" button
+      document
+        .querySelector(".btn-filter:first-of-type")
+        .classList.add("active");
     });
 
   /*function applyFilters() {

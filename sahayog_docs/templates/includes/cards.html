@@ -1,54 +1,46 @@
-
-
 {% for circular in circulars %}
-<div class="col-lg-3 col-md-6 mb-4">
-  <div class="card" >
-    <div class="view-doc-btn">
-      <a
-        href="{{ circular.circular_doc }}"
-        class="btn btn-primary"
-        target="_blank"
-        >View Document</a
-      >
-    </div>
-    <div class="card-body">
-      <h5 class="card-title">{{ circular.circular_name }}</h5>
-      <div class="d-flex">
-        <p class="card-text">{{ circular.year }}</p>
-        <p class="dot"></p>
-        <p class="card-text"> {{ circular.date }}</p>
+<div class="col-lg-3 col-md-6 mb-4 mr-2">
+  <div class="card">
+    <!-- Wrap the entire card content in an anchor tag -->
+    <a href="{{ circular.circular_doc }}" target="_blank" style="text-decoration: none; color: inherit;">
+      <div class="card_header {% if circular.type == 'SOP' %}sop-header{% else %}circular-header{% endif %}">
+        <span class="view_doc {% if circular.type == 'SOP' %}sop-view-doc{% else %}circular-view-doc{% endif %}">{{ circular.type }}</span>
       </div>
-    </div>
+      <div class="card_body">
+        <div class="card-title">{{ circular.circular_name }}</div>
+        <div class="card_content">
+          <p class="card-text">{{ circular.year }}</p>
+          <span class="dot">·</span>
+          <p class="card-text">{{ circular.date }}</p>
+        </div>
+      </div>
+    </a>
   </div>
 </div>
-{% endfor %} {% if not circulars %}
-{% set circulars = frappe.db.get_all("Circular", fields=["name",
-"circular_name", "year", "date", "circular_id",
-"circular_doc","type"], order_by="name desc") %} {% for circular in
-circulars %}
-<div class="col-lg-3 col-md-6 mb-4">
-  <div class="card" >
-    <div class="view-doc-btn">
-      <a
-        href="{{ circular.circular_doc }}"
-        class="btn btn-primary"
-        target="_blank"
-        >View Document</a
-      >
-    </div>
-    <div class="card-body">
-      <h5 class="card-title">{{ circular.circular_name }}</h5>
-      <div class="d-flex">
-        <p class="card-text"> {{ circular.year }}</p> 
-        <p class="dot"></p>
-        <p class="card-text"> {{ circular.date }}</p>
+{% endfor %}
+{% if not circulars %}
+{% set circulars = frappe.db.get_all("Circular", fields=["name", "circular_name", "year", "date", "circular_id", "circular_doc", "type"], order_by="name desc") %}
+{% for circular in circulars %}
+<div class="col-lg-3 col-md-6 mb-4 mr-2">
+  <div class="card">
+    <!-- Wrap the entire card content in an anchor tag -->
+    <a href="{{ circular.circular_doc }}" target="_blank" style="text-decoration: none; color: inherit;">
+      <div class="card_header {% if circular.type == 'SOP' %}sop-header{% else %}circular-header{% endif %}">
+        <span class="view_doc {% if circular.type == 'SOP' %}sop-view-doc{% else %}circular-view-doc{% endif %}">{{ circular.type }}</span>
       </div>
-    </div>
+      <div class="card_body">
+        <div class="card-title">{{ circular.circular_name }}</div>
+        <div class="card_content">
+          <p class="card-text">{{ circular.year }}</p>
+          <span class="dot">·</span>
+          <p class="card-text">{{ circular.date }}</p>
+        </div>
+      </div>
+    </a>
   </div>
 </div>
 {% endfor %}
 </div>
 </div>
 </div>
-
 {% endif %}
