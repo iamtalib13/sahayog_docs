@@ -44,6 +44,10 @@
     background-color: #343a40; /* Dark background for dropdown options */
     color: white;
   }
+  .filter-icon {
+    height: 10px;
+    width: 10px;
+  }
 </style>
 
 <div class="container">
@@ -57,6 +61,12 @@
         hx-trigger="change from:select"
       >
         <div class="row pb-3">
+          <!--
+          <div class="col-auto">
+            <img class="filter-icon" src="/files/filter (1).png" alt="" />
+          </div>
+         -->
+
           <div class="col-auto">
             <select
               class="form-select form-select-sm custom-select"
@@ -181,6 +191,19 @@
         allButton.classList.add("active");
       }
     });*/
+
+  const otherButtons = document.querySelectorAll(".btn");
+
+  // Function to clear selections
+  function clearSelections() {
+    yearSelect.selectedIndex = 0;
+    monthSelect.selectedIndex = 0;
+  }
+
+  // Attach event listeners to other buttons
+  otherButtons.forEach((button) => {
+    button.addEventListener("click", clearSelections);
+  });
 
   document.body.addEventListener("htmx:afterOnLoad", function (evt) {
     if (evt.detail.elt.id === "filterForm") {

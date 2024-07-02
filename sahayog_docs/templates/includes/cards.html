@@ -1,5 +1,5 @@
 {% for circular in circulars %}
-<div class="col-lg-3 col-md-6 mb-4 mr-2">
+<div class="col-lg-3 col-md-6 mb-2 mr-2">
   <div class="card">
     <!-- Wrap the entire card content in an anchor tag -->
     <a href="{{ circular.circular_doc }}" target="_blank" style="text-decoration: none; color: inherit;">
@@ -8,20 +8,21 @@
       </div>
       <div class="card_body">
         <div class="card-title">{{ circular.circular_name }}</div>
-        <div class="card_content">
-          <p class="card-text">{{ circular.year }}</p>
-          <span class="dot">·</span>
-          <p class="card-text date">{{ circular.date }}</p>
-        </div>
+       
       </div>
     </a>
+  </div>
+  <div class="card_content text-white">
+    <p class="card-text" id="year">{{ circular.year }}</p>
+    <span class="dot">·</span>
+    <p class="card-text date">{{ circular.date }}</p>
   </div>
 </div>
 {% endfor %}
 {% if not circulars %}
 {% set circulars = frappe.db.get_all("Circular", fields=["name", "circular_name", "year", "date", "circular_id", "circular_doc", "type"], order_by="date desc") %}
 {% for circular in circulars %}
-<div class="col-lg-3 col-md-6 mb-4 mr-2">
+<div class="col-lg-3 col-md-6 mb-2 mr-2">
   <div class="card">
     <!-- Wrap the entire card content in an anchor tag -->
     <a href="{{ circular.circular_doc }}" target="_blank" style="text-decoration: none; color: inherit;">
@@ -30,13 +31,14 @@
       </div>
       <div class="card_body">
         <div class="card-title">{{ circular.circular_name }}</div>
-        <div class="card_content">
-          <p class="card-text">{{ circular.year }}</p>
-          <span class="dot">·</span>
-          <p class="card-text date">{{ circular.date }}</p>
-        </div>
+       
       </div>
     </a>
+  </div>
+  <div class="card_content text-white">
+    <p class="card-text" id="year">{{ circular.year }}</p>
+    <span class="dot">·</span>
+    <p class="card-text date">{{ circular.date }}</p>
   </div>
 </div>
 {% endfor %}

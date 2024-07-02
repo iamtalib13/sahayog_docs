@@ -10,6 +10,7 @@ from werkzeug.wrappers import request, Response
 # from datetime import datetime
 
 import json
+from frappe.utils import getdate
 
 
 class Circular(Document):
@@ -37,11 +38,13 @@ def get_list(doc_type=None):
         order_by="date desc",
     )
 
+    for circular in circulars:
+        if circular["date"]:
+            circular["date"] = getdate(circular["date"]).strftime("%d-%m-%Y")
+
     if not circulars:
-        # Return a message if no data is found
         html_content = "<p>No data found for the selected filters.</p>"
     else:
-        # Render HTML content using the data fetched
         html_content = frappe.render_template(
             "templates/includes/cards.html", {"circulars": circulars}
         )
@@ -75,11 +78,13 @@ def get_time_list(year=None, month=None):
         order_by="date desc",
     )
 
+    for circular in circulars:
+        if circular["date"]:
+            circular["date"] = getdate(circular["date"]).strftime("%d-%m-%Y")
+
     if not circulars:
-        # Return a message if no data is found
         html_content = "<p>No data found for the selected filters.</p>"
     else:
-        # Render HTML content using the data fetched
         html_content = frappe.render_template(
             "templates/includes/cards.html", {"circulars": circulars}
         )

@@ -211,8 +211,7 @@
 
       .card {
         font-family: "Poppins", sans-serif;
-        /* height: 200px;
-        width: 240px;*/
+        height: 200px;
         color: #000;
         background-color: #d8efdb;
       }
@@ -239,6 +238,7 @@
         padding: 0 11px;
       }
       .card_content {
+        margin-top: 5px;
         display: flex;
         font-size: 13px;
         gap: 5px;
@@ -250,6 +250,11 @@
       .card-title {
         height: 50px;
         font-size: large;
+      }
+      #year {
+        background: #b83939;
+        padding: 0 4px;
+        border-radius: 2px;
       }
 
       /* Specific styles for headers based on document type */
@@ -290,6 +295,7 @@
         border-radius: 12px;
       }*/
     </style>
+
     <script>
       // Function to handle button clicks
       function handleFilterButtonClick(button) {
@@ -340,76 +346,80 @@
         </li> -->
       </ul>
     </nav>
-    <header id="header">
-      <div id="filter-bar">
-        {% set circular_count = frappe.db.count('Circular', {'type':
-        'Circular'}) %} {% set sop_count = frappe.db.count('Circular', {'type':
-        'Process & Policies'}) %}
-        <div class="rounded-pill" role="group" aria-label="Filter Group">
-          <button
-            type="button"
-            class="btn btn-outline-secondary btn-filter active"
-            hx-get="/api/method/sahayog_docs.circulars.doctype.circular.circular.get_list"
-            hx-target="#doc-list"
-            onclick="handleFilterButtonClick(this)"
-          >
-            All
-            <span class="badge">{{circular_count + sop_count}}</span>
-          </button>
 
-          <button
-            type="button"
-            class="btn btn-outline-secondary btn-filter ms-2"
-            hx-get="/api/method/sahayog_docs.circulars.doctype.circular.circular.get_list"
-            hx-target="#doc-list"
-            hx-params='{"doc_type": "Circular"}'
-            onclick="handleFilterButtonClick(this)"
-          >
-            Circular<span class="badge">{{circular_count}}</span>
-          </button>
-          <button
-            type="button"
-            class="btn btn-outline-secondary btn-filter ms-2"
-            hx-get="/api/method/sahayog_docs.circulars.doctype.circular.circular.get_list"
-            hx-target="#doc-list"
-            hx-params='{"doc_type": "Process & Policies"}'
-            onclick="handleFilterButtonClick(this)"
-          >
-            Process & Policies <span class="badge">{{sop_count}}</span>
-          </button>
-        </div>
+    <div class="right-container" id="right-container">
+      <header id="header">
+        <div id="filter-bar">
+          {% set circular_count = frappe.db.count('Circular', {'type':
+          'Circular'}) %} {% set sop_count = frappe.db.count('Circular',
+          {'type': 'Process & Policies'}) %}
+          <div class="rounded-pill" role="group" aria-label="Filter Group">
+            <button
+              type="button"
+              class="btn btn-outline-secondary btn-filter active"
+              hx-get="/api/method/sahayog_docs.circulars.doctype.circular.circular.get_list"
+              hx-target="#doc-list"
+              onclick="handleFilterButtonClick(this)"
+            >
+              All
+              <span class="badge">{{circular_count + sop_count}}</span>
+            </button>
 
-        <form
-          id="search-form"
-          class="form-inline ms-2"
-          hx-get="/api/method/sahayog_docs.circulars.doctype.circular.circular.search"
-          hx-trigger="submit"
-          hx-target="#doc-list"
-        >
-          <div class="search-container">
-            <input
-              id="search-input"
-              class="form-control"
-              type="search"
-              placeholder="Search"
-              aria-label="Search"
-              name="query"
-            />
-            <button id="search-btn" class="btn search-btn" type="submit">
-              <img class="search_icon" src="/files/find.png" alt="search" />
+            <button
+              type="button"
+              class="btn btn-outline-secondary btn-filter ms-2"
+              hx-get="/api/method/sahayog_docs.circulars.doctype.circular.circular.get_list"
+              hx-target="#doc-list"
+              hx-params='{"doc_type": "Circular"}'
+              onclick="handleFilterButtonClick(this)"
+            >
+              Circular<span class="badge">{{circular_count}}</span>
+            </button>
+            <button
+              type="button"
+              class="btn btn-outline-secondary btn-filter ms-2"
+              hx-get="/api/method/sahayog_docs.circulars.doctype.circular.circular.get_list"
+              hx-target="#doc-list"
+              hx-params='{"doc_type": "Process & Policies"}'
+              onclick="handleFilterButtonClick(this)"
+            >
+              Process & Policies <span class="badge">{{sop_count}}</span>
             </button>
           </div>
-        </form>
-      </div>
-    </header>
 
-    <div id="content">
-      <div class="time-filter">
-        {% include "/templates/includes/time_filter.html" %}
-      </div>
-      <div class="container-fluid">
-        <div class="row" id="doc-list">
-          {% include "/templates/includes/cards.html" %}
+          <form
+            id="search-form"
+            class="form-inline ms-2"
+            hx-get="/api/method/sahayog_docs.circulars.doctype.circular.circular.search"
+            hx-trigger="submit"
+            hx-target="#doc-list"
+          >
+            <div class="search-container">
+              <input
+                id="search-input"
+                class="form-control"
+                type="search"
+                placeholder="Search"
+                aria-label="Search"
+                name="query"
+              />
+              <button id="search-btn" class="btn search-btn" type="submit">
+                <img class="search_icon" src="/files/find.png" alt="search" />
+              </button>
+            </div>
+          </form>
+        </div>
+        <div class="current-user">{{frappe.session.user}}</div>
+      </header>
+
+      <div id="content">
+        <div class="time-filter">
+          {% include "/templates/includes/time_filter.html" %}
+        </div>
+        <div class="container-fluid">
+          <div class="row" id="doc-list">
+            {% include "/templates/includes/cards.html" %}
+          </div>
         </div>
       </div>
     </div>
