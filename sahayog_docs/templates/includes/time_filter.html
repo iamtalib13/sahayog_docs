@@ -1,0 +1,204 @@
+<style>
+  .clear_all {
+    text-decoration: underline;
+    padding: 0;
+    color: #fff;
+  }
+  .filter_title {
+    padding-top: 4px;
+  }
+
+  .btn-search {
+    padding: 0;
+  }
+  option {
+    background-color: #272727;
+  }
+  .search-btn {
+    background-color: transparent;
+    color: white;
+    padding: 6px;
+    font-size: 16px;
+    border-radius: 11px;
+    display: flex;
+    align-items: center;
+    border: 1px solid #272727;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .custom-select {
+    background-color: transparent;
+    color: white;
+    border: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+    cursor: pointer;
+    width: 90px;
+    padding: 3px 3px;
+  }
+  .custom-select:focus {
+    box-shadow: none;
+    cursor: pointer;
+  }
+  .custom-select option {
+    background-color: #343a40; /* Dark background for dropdown options */
+    color: white;
+  }
+</style>
+
+<div class="container">
+  <div class="row pb-3">
+    <div class="col-auto">
+      <form
+        id="year-month-form"
+        hx-get="/api/method/sahayog_docs.circulars.doctype.circular.circular.get_time_list"
+        hx-vals='js:{year: document.getElementById("yearSelect").value, month: document.getElementById("monthSelect").value}'
+        hx-target="#doc-list"
+        hx-trigger="change from:select"
+      >
+        <div class="row pb-3">
+          <div class="col-auto">
+            <select
+              class="form-select form-select-sm custom-select"
+              name="year"
+              id="yearSelect"
+              aria-label="Year select"
+            >
+              <option value="" selected>Year</option>
+              <option value="2024-25">2024-25</option>
+              <option value="2023-24">2023-24</option>
+              <option value="2022-23">2022-23</option>
+              <option value="2021-22">2021-22</option>
+              <option value="2020-21">2020-21</option>
+              <option value="2019-20">2019-20</option>
+              <option value="2018-19">2018-19</option>
+            </select>
+          </div>
+          <div class="col-auto">
+            <select
+              class="form-select form-select-sm custom-select"
+              name="month"
+              id="monthSelect"
+              aria-label="Month select"
+            >
+              <option value="" selected>Month</option>
+              <option value="01">January</option>
+              <option value="02">February</option>
+              <option value="03">March</option>
+              <option value="04">April</option>
+              <option value="05">May</option>
+              <option value="06">June</option>
+              <option value="07">July</option>
+              <option value="08">August</option>
+              <option value="09">September</option>
+              <option value="10">October</option>
+              <option value="11">November</option>
+              <option value="12">December</option>
+            </select>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!--<div class="side_filter">
+  <div class="filter_title d-flex">
+    <h6
+      id="clearAllBtn"
+      class="btn clear_all ms-auto"
+      hx-get="/api/method/sahayog_docs.circulars.doctype.circular.circular.get_list"
+      hx-target="#doc-list"
+    >
+      CLEAR ALL
+    </h6>
+  </div>
+
+  <div class="filter_content d-flex">
+    <form
+      id="filterForm"
+      hx-get="/api/method/sahayog_docs.circulars.doctype.circular.circular.get_time_list"
+      hx-vals='js:{year: document.getElementById("yearSelect").value, month: document.getElementById("monthSelect").value}'
+      hx-target="#doc-list"
+      hx-indicator="#loading"
+    >
+      <div class="mb-3 d-flex">
+        <div class="select-container">
+          <select id="yearSelect" name="year">
+            <option selected disabled value="">Year</option>
+            <option value="2024-25">2024-25</option>
+            <option value="2023-24">2023-24</option>
+            <option value="2022-23">2022-23</option>
+            <option value="2021-22">2021-22</option>
+            <option value="2020-21">2020-21</option>
+            <option value="2019-20">2019-20</option>
+            <option value="2018-19">2018-19</option>
+          </select>
+        </div>
+        <div class="select-container ms-2">
+          <select id="monthSelect" name="month">
+            <option selected disabled value="">Month</option>
+            <option value="01">January</option>
+            <option value="02">February</option>
+            <option value="03">March</option>
+            <option value="04">April</option>
+            <option value="05">May</option>
+            <option value="06">June</option>
+            <option value="07">July</option>
+            <option value="08">August</option>
+            <option value="09">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+          </select>
+        </div>
+        <div class="select-container ms-2">
+          <button type="submit" class="search-btn">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<div id="loading" class="htmx-indicator">Loading...</div>-->
+
+<script>
+  //to clear or remove applied filters
+  /*document
+    .getElementById("clearAllBtn")
+    .addEventListener("click", function (event) {
+      event.preventDefault();
+      document.getElementById("yearSelect").selectedIndex = 0;
+      document.getElementById("monthSelect").selectedIndex = 0;
+
+      //to active a default tab as All tab
+      document.querySelectorAll(".btn-filter").forEach((btn) => {
+        btn.classList.remove("active");
+      });
+      var allButton = document.querySelector(".btn-filter:first-of-type");
+      if (allButton) {
+        allButton.classList.add("active");
+      }
+    });*/
+
+  document.body.addEventListener("htmx:afterOnLoad", function (evt) {
+    if (evt.detail.elt.id === "filterForm") {
+      console.log(
+        "Response received from server:",
+        evt.detail.xhr.responseText
+      );
+      /* try {
+          const response = JSON.parse(evt.detail.xhr.responseText);
+          if (!response.message.trim()) {
+            alert("No data found for the selected filters.");
+          } else {
+            document.querySelector("#doc-list").innerHTML = response.message;
+          }
+        } catch (error) {
+          console.error("Error parsing response:", error);
+          alert("An error occurred while processing the response.");
+        }*/
+    }
+  });
+</script>

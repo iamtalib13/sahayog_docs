@@ -92,7 +92,7 @@
    "fieldname": "type",
    "fieldtype": "Select",
    "label": "Type",
-   "options": "\nCircular\nSOP"
+   "options": "\nCircular\nProcess & Policies"
   },
   {
    "fieldname": "month",
@@ -104,7 +104,7 @@
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-06-15 12:30:33.763563",
+ "modified": "2024-06-29 10:30:05.501587",
  "modified_by": "Administrator",
  "module": "Circulars",
  "name": "Circular",

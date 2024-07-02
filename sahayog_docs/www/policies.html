@@ -52,7 +52,7 @@
         position: fixed;
         top: 0;
         bottom: 0;
-        padding: 15px;
+        padding: 15px 10px;
         overflow-y: auto;
         z-index: 1;
       }
@@ -110,6 +110,10 @@
         background: white; /* Same as the default background color */
         color: #000;
       }
+      button.btn.btn-outline-secondary.btn-filter.active:hover {
+        background: white; /* Same as the default background color */
+        color: #000;
+      }
 
       #content {
         margin-left: 250px;
@@ -120,19 +124,15 @@
         z-index: 0;
       }
 
-      .nav-link {
-        color: #333;
-      }
-
-      .nav-link:hover {
-        background-color: #e9ecef;
-        color: #000;
-      }
-
-      .nav-link.active {
-        background-color: #007bff;
+      /*.nav-link:hover {
+        background-color: #5a5a5a;
         color: #fff;
       }
+
+      a.nav-link.active {
+        background-color: #fff;
+        color: #000;
+      }*/
 
       .form-inline .form-control {
         width: 300px;
@@ -154,6 +154,7 @@
       .logo {
         width: 230px;
         height: 51px;
+        cursor: pointer;
       }
       .search_icon {
         width: 35px;
@@ -220,7 +221,7 @@
         border: none;
         text-align: center;
         border-radius: 7px;
-        padding: 40px;
+        padding: 40px 0px;
         background: linear-gradient(
           180deg,
           #d9d9d9,
@@ -229,10 +230,10 @@
       }
       .view_doc {
         text-decoration: none;
-        padding: 2px 20px;
+        padding: 10px;
         border-radius: 29px;
         color: #000;
-        font-size: 14px;
+        font-size: 13px;
       }
       .card_body {
         padding: 0 11px;
@@ -275,6 +276,19 @@
         background-color: #80f37e; /* Circular background color for view_doc */
         color: #000; /* Adjust text color as needed */
       }
+      .forms {
+        width: 21px;
+        height: 21px;
+      }
+      .create_forms {
+        color: #fff;
+
+        margin-bottom: 8px;
+      }
+      /* .create_forms:hover {
+        border: 1px solid #272727;
+        border-radius: 12px;
+      }*/
     </style>
     <script>
       // Function to handle button clicks
@@ -303,7 +317,7 @@
     {% if frappe.session.user == "Guest" or frappe.session.user != "Guest" %}
     <nav id="sidebar" class="d-flex flex-column">
       <div class="navbar-brand">
-        <img class="logo" src="/files/Sahayog.png" alt="" />
+        <img class="logo" id="brand-logo" src="/files/Sahayog.png" alt="Logo" />
       </div>
       <ul class="nav flex-column mt-4">
         <li class="nav-item">
@@ -316,16 +330,21 @@
             {% include "/templates/includes/sidebar_filter.html" %}
           </div>
         </li>
-        <li class="nav-item">
-          <a class="nav-link forms" href="#">Forms</a>
-        </li>
+        <!-- <li class="nav-item">
+          <a class="nav-link create_forms" href="#">
+            <span
+              ><img class="forms" src="/files/writing (1).png" alt=""
+            /></span>
+            Forms & Formats</a
+          >
+        </li> -->
       </ul>
     </nav>
     <header id="header">
       <div id="filter-bar">
         {% set circular_count = frappe.db.count('Circular', {'type':
         'Circular'}) %} {% set sop_count = frappe.db.count('Circular', {'type':
-        'SOP'}) %}
+        'Process & Policies'}) %}
         <div class="rounded-pill" role="group" aria-label="Filter Group">
           <button
             type="button"
@@ -353,22 +372,30 @@
             class="btn btn-outline-secondary btn-filter ms-2"
             hx-get="/api/method/sahayog_docs.circulars.doctype.circular.circular.get_list"
             hx-target="#doc-list"
-            hx-params='{"doc_type": "SOP"}'
+            hx-params='{"doc_type": "Process & Policies"}'
             onclick="handleFilterButtonClick(this)"
           >
-            SOP<span class="badge">{{sop_count}}</span>
+            Process & Policies <span class="badge">{{sop_count}}</span>
           </button>
         </div>
 
-        <form class="form-inline ms-2">
+        <form
+          id="search-form"
+          class="form-inline ms-2"
+          hx-get="/api/method/sahayog_docs.circulars.doctype.circular.circular.search"
+          hx-trigger="submit"
+          hx-target="#doc-list"
+        >
           <div class="search-container">
             <input
+              id="search-input"
               class="form-control"
               type="search"
               placeholder="Search"
               aria-label="Search"
+              name="query"
             />
-            <button class="btn search-btn" type="submit">
+            <button id="search-btn" class="btn search-btn" type="submit">
               <img class="search_icon" src="/files/find.png" alt="search" />
             </button>
           </div>
@@ -377,6 +404,9 @@
     </header>
 
     <div id="content">
+      <div class="time-filter">
+        {% include "/templates/includes/time_filter.html" %}
+      </div>
       <div class="container-fluid">
         <div class="row" id="doc-list">
           {% include "/templates/includes/cards.html" %}
@@ -402,6 +432,42 @@
     ></script>
 
     <script>
+      // Get the logo image element
+      const logo = document.getElementById("brand-logo");
+
+      // Add click event listener to the logo to reload page
+      if (logo) {
+        logo.addEventListener("click", function () {
+          location.reload(); // Reload the page
+        });
+      }
+
+      /* Script to prevent form submission if the input is empty */
+      document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("search-form");
+        const input = document.getElementById("search-input");
+        const searchBtn = document.getElementById("search-btn");
+
+        form.addEventListener("submit", function (event) {
+          document.querySelectorAll(".btn-filter").forEach((btn) => {
+            btn.classList.remove("active");
+          });
+          var allButton = document.querySelector(".btn-filter:first-of-type");
+          if (allButton) {
+            allButton.classList.add("active");
+          }
+          if (input.value.trim() === "") {
+            event.preventDefault(); // Prevent form submission if input is empty
+          }
+        });
+
+        searchBtn.addEventListener("click", function (event) {
+          if (input.value.trim() === "") {
+            event.preventDefault(); // Prevent form submission if input is empty
+          }
+        });
+      });
+
       document.addEventListener("htmx:configRequest", function (evt) {
         if (evt.detail.elt.getAttribute("hx-params")) {
           evt.detail.parameters["doc_type"] = JSON.parse(

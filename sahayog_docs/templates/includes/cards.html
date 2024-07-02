@@ -3,15 +3,15 @@
   <div class="card">
     <!-- Wrap the entire card content in an anchor tag -->
     <a href="{{ circular.circular_doc }}" target="_blank" style="text-decoration: none; color: inherit;">
-      <div class="card_header {% if circular.type == 'SOP' %}sop-header{% else %}circular-header{% endif %}">
-        <span class="view_doc {% if circular.type == 'SOP' %}sop-view-doc{% else %}circular-view-doc{% endif %}">{{ circular.type }}</span>
+      <div class="card_header {% if circular.type == 'Process & Policies' %}sop-header{% else %}circular-header{% endif %}">
+        <span class="view_doc {% if circular.type == 'Process & Policies' %}sop-view-doc{% else %}circular-view-doc{% endif %}">{{ circular.type }}</span>
       </div>
       <div class="card_body">
         <div class="card-title">{{ circular.circular_name }}</div>
         <div class="card_content">
           <p class="card-text">{{ circular.year }}</p>
           <span class="dot">·</span>
-          <p class="card-text">{{ circular.date }}</p>
+          <p class="card-text date">{{ circular.date }}</p>
         </div>
       </div>
     </a>
@@ -19,21 +19,21 @@
 </div>
 {% endfor %}
 {% if not circulars %}
-{% set circulars = frappe.db.get_all("Circular", fields=["name", "circular_name", "year", "date", "circular_id", "circular_doc", "type"], order_by="name desc") %}
+{% set circulars = frappe.db.get_all("Circular", fields=["name", "circular_name", "year", "date", "circular_id", "circular_doc", "type"], order_by="date desc") %}
 {% for circular in circulars %}
 <div class="col-lg-3 col-md-6 mb-4 mr-2">
   <div class="card">
     <!-- Wrap the entire card content in an anchor tag -->
     <a href="{{ circular.circular_doc }}" target="_blank" style="text-decoration: none; color: inherit;">
-      <div class="card_header {% if circular.type == 'SOP' %}sop-header{% else %}circular-header{% endif %}">
-        <span class="view_doc {% if circular.type == 'SOP' %}sop-view-doc{% else %}circular-view-doc{% endif %}">{{ circular.type }}</span>
+      <div class="card_header {% if circular.type == 'Process & Policies' %}sop-header{% else %}circular-header{% endif %}">
+        <span class="view_doc {% if circular.type == 'Process & Policies' %}sop-view-doc{% else %}circular-view-doc{% endif %}">{{ circular.type }}</span>
       </div>
       <div class="card_body">
         <div class="card-title">{{ circular.circular_name }}</div>
         <div class="card_content">
           <p class="card-text">{{ circular.year }}</p>
           <span class="dot">·</span>
-          <p class="card-text">{{ circular.date }}</p>
+          <p class="card-text date">{{ circular.date }}</p>
         </div>
       </div>
     </a>
@@ -44,3 +44,17 @@
 </div>
 </div>
 {% endif %}
+
+<script>
+  // format date as DD-MM-YYYY
+  document.addEventListener('DOMContentLoaded', (event) => {
+    document.querySelectorAll('.card-text').forEach((element) => {
+      let dateText = element.innerText;
+      if (dateText.match(/^\d{4}-\d{2}-\d{2}$/)) {  // Check if the date is in YYYY-MM-DD format
+        let parts = dateText.split('-');
+        element.innerText = `${parts[2]}-${parts[1]}-${parts[0]}`; // Reformat to DD-MM-YYYY
+      }
+    });
+  });
+</script>
+

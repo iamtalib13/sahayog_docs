@@ -1,122 +1,148 @@
 import re
 import os
 import frappe
+
 # from __future__ import unicode_literals
 from frappe.model.document import Document
 from werkzeug.wrappers import request, Response
+
 # from frappe.utils.response import as_html
 # from datetime import datetime
 
 import json
 
+
 class Circular(Document):
     pass
+
 
 @frappe.whitelist(allow_guest=True)
 def get_list(doc_type=None):
     filters = {}
     if doc_type:
-        filters['type'] = doc_type
-        
+        filters["type"] = doc_type
 
-    circulars = frappe.db.get_all("Circular", 
-                                  filters=filters,
-                                  fields=["name", "circular_name", "year", "date", "circular_id", "circular_doc", "type"],
-                                  order_by="name desc")
-    
-    
-    html_content = frappe.render_template("templates/includes/cards.html", {"circulars": circulars})
+    circulars = frappe.db.get_all(
+        "Circular",
+        filters=filters,
+        fields=[
+            "name",
+            "circular_name",
+            "year",
+            "date",
+            "circular_id",
+            "circular_doc",
+            "type",
+        ],
+        order_by="date desc",
+    )
+
+    if not circulars:
+        # Return a message if no data is found
+        html_content = "<p>No data found for the selected filters.</p>"
+    else:
+        # Render HTML content using the data fetched
+        html_content = frappe.render_template(
+            "templates/includes/cards.html", {"circulars": circulars}
+        )
 
     return Response(html_content)
-
 
 
 @frappe.whitelist(allow_guest=True)
-def get_time_list(year=None):
+def get_time_list(year=None, month=None):
     filters = {}
-        
+
     if year:
-        filters['year'] = year
-        
-    
-        
-    circulars = frappe.get_all("Circular", 
-                                  filters=filters,
-                                  fields=["name", "circular_name", "year", "date", "circular_id", "circular_doc", "type"],
-                                  order_by="name desc")
-    
+        filters["year"] = year
+
+    if month:
+        filters["month"] = month
+
+    circulars = frappe.get_all(
+        "Circular",
+        filters=filters,
+        fields=[
+            "name",
+            "circular_name",
+            "year",
+            "month",
+            "date",
+            "circular_id",
+            "circular_doc",
+            "type",
+        ],
+        order_by="date desc",
+    )
+
     if not circulars:
         # Return a message if no data is found
-        html_content = "<p>No data found for the selected year.</p>"
+        html_content = "<p>No data found for the selected filters.</p>"
     else:
         # Render HTML content using the data fetched
-        html_content = frappe.render_template("templates/includes/cards.html", {"circulars": circulars})
+        html_content = frappe.render_template(
+            "templates/includes/cards.html", {"circulars": circulars}
+        )
+
     return Response(html_content)
 
-# @frappe.whitelist(allow_guest=True)
-# def get_time_list(year=None, month=None):
-#     filters = {}
 
-#     if not year and not month:
-#         # Case 1: Both year and month are None
-#         circulars = frappe.get_all("Circular",
-#                                    fields=["name", "circular_name", "year", "month", "date", "circular_id", "circular_doc", "type"],
-#                                    order_by="name desc")
-#     elif year and not month:
-#         # Case 2: Year is present, but month is None
-#         filters['year'] = year
-#         circulars = frappe.get_all("Circular",
-#                                    filters=filters,
-#                                    fields=["name", "circular_name", "year", "month", "date", "circular_id", "circular_doc", "type"],
-#                                    order_by="name desc")
-#     elif not year and month:
-#         # Case 3: Year is None, but month is present
-#         # Handle this case as per your application logic
-#         # Example: Fetch circulars for the given month across all years
-#         # Here we assume you have the logic to handle month filtering
-#         circulars = frappe.get_all("Circular",
-#                                    fields=["name", "circular_name", "year", "month", "date", "circular_id", "circular_doc", "type"],
-#                                    order_by="name desc")
-#     elif year and month:
-#         # Case 4: Both year and month are present
-#         filters['year'] = year
-#         filters['month'] = month
-#         circulars = frappe.get_all("Circular",
-#                                    filters=filters,
-#                                    fields=["name", "circular_name", "year", "month", "date", "circular_id", "circular_doc", "type"],
-#                                    order_by="name desc")
-#     else:
-#         # Handle any unexpected case here
-#         circulars = []
+# search funtion to handle the search functionality
+@frappe.whitelist(allow_guest=True)
+def search():
+    query = frappe.form_dict.get("query", "")
 
-#     if not circulars:
-#         # Return a message if no data is found
-#         html_content = "<p>No data found for the selected filters.</p>"
-#     else:
-#         # Render HTML content using the data fetched
-#         html_content = frappe.render_template("templates/includes/cards.html", {"circulars": circulars})
-    
-#     return html_content
+    try:
+        # Perform the search on multiple fields
+        results = frappe.db.sql(
+            """
+            SELECT name, circular_name, year, date, circular_doc, type
+            FROM `tabCircular`
+            WHERE circular_name LIKE %(query)s
+            OR type LIKE %(query)s
+            """,
+            {"query": f"%{query}%"},
+            as_dict=True,
+        )
 
+        if not results:
+            cards_html = "<p>No data found</p>"
+            # Return a message when no results are found
 
+        else:
+
+            # Render the HTML using the template
+            cards_html = frappe.render_template(
+                "templates/includes/cards.html", {"circulars": results}
+            )
+
+        return Response(cards_html)
+
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), "Search Error")
+        return frappe.utils.response.report_error(
+            "An error occurred while processing your request.", error_code=500
+        )
 
 
 @frappe.whitelist(allow_guest=True)
 def capture():
     # Get the uploaded file
-    uploaded_file = frappe.request.files.get('file')
+    uploaded_file = frappe.request.files.get("file")
     if not uploaded_file:
         return {"message": "Error: No file uploaded."}
-    
+
     file_content = uploaded_file.read()
     file_name_old = uploaded_file.filename
-    
+
     # Extract year from the file name using regex
-    match = re.search(r'\((\d{4}-\d{2})\)', file_name_old)
+    match = re.search(r"\((\d{4}-\d{2})\)", file_name_old)
     if match:
         year = match.group(1)
     else:
-        return {"message": "Error: Invalid file name format. Expected '(year) description.pdf'."}
+        return {
+            "message": "Error: Invalid file name format. Expected '(year) description.pdf'."
+        }
 
     # Construct the folder path based on the year
     folder_path = os.path.join("private", "files", "circulars", year)
@@ -141,7 +167,7 @@ def capture():
     file_doc.attached_to_name = docname
     file_doc.folder = "Home"
     file_doc.attached_to_doctype = "Circular"
-    file_doc.attached_to_field = 'upload_doc'
+    file_doc.attached_to_field = "upload_doc"
     file_doc.insert()
 
     # Return response with file name, file path, and success message
@@ -149,13 +175,10 @@ def capture():
         "message": "File uploaded successfully.",
         "file_url": file_url,
         "file_name": file_name_old,
-        "file_path": file_path
+        "file_path": file_path,
     }
-
 
 
 @frappe.whitelist(allow_guest=True)
 def check():
     return "Pong"
-
-

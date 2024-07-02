@@ -4,195 +4,95 @@
   href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
 />
 <style>
-  button.btn.home {
-    color: white;
-    border: 1px solid #272727;
-    border-radius: 12px;
-    background: #272727;
-    margin-bottom: 8px;
+  button.btn.side_btn {
+    color: #fff;
+    background: transparent;
+    text-align: left;
   }
-  .home_icon {
+  button.btn.side_btn.active {
+    color: #000;
+    background: #fff;
+    text-align: left;
+    border-radius: 11px;
+  }
+
+  .nav_icon {
     width: 21px;
     height: 21px;
-  }
-  .side_filter {
-    padding: 10px;
-    border: 1px solid #272727;
-    border-radius: 11px;
-  }
-  .clear_all {
-    text-decoration: underline;
-    padding: 0;
-    color: #fff;
-  }
-  .filter_title {
-    padding-top: 4px;
-  }
-  #yearSelect,
-  #monthSelect {
-    background: transparent;
-    color: #fff;
-    padding: 3px 3px;
-    text-align: center;
-    font-size: 15px;
-    border-radius: 11px;
-    width: 76px;
-    border-color: #272727;
-  }
-  .btn-search {
-    padding: 0;
-  }
-  option {
-    background-color: #272727;
-  }
-  .search-btn {
-    background-color: transparent;
-    color: white;
-    padding: 6px;
-    font-size: 16px;
-    border-radius: 11px;
-    display: flex;
-    align-items: center;
-    border: 1px solid #272727;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    margin-right: 13px;
+    margin-bottom: 3px;
   }
 </style>
 
-<div class="d-grid gap-2">
-  <button class="btn home" type="button">
-    <span><img class="home_icon" src="/files/round.png" alt="" /></span>Circular
+<div class="d-grid side_btns gap-1">
+  <button
+    class="btn side_btn active"
+    id="circular-btn"
+    type="button"
+    data-active-src="/files/home-icon-silhouette_69524.png"
+    data-inactive-src="/files/home-icon-silhouette.png"
+  >
+    <span>
+      <img
+        class="nav_icon"
+        src="/files/home-icon-silhouette_69524.png"
+        alt="Circular Icon"
+      />
+    </span>
+    Circular
+  </button>
+
+  <button
+    class="btn side_btn"
+    type="button"
+    data-active-src="/files/exam_9316703.png"
+    data-inactive-src="/files/exam (1).png"
+  >
+    <span>
+      <img class="nav_icon" src="/files/exam (1).png" alt="Forms Icon" /> </span
+    >Forms & Formats
+  </button>
+  <button
+    class="btn side_btn"
+    type="button"
+    data-active-src="/files/web-management (1).png"
+    data-inactive-src="/files/web-management.png"
+  >
+    <span>
+      <img
+        class="nav_icon"
+        src="/files/web-management.png"
+        alt="CMS Icon"
+      /> </span
+    >CMS
   </button>
 </div>
-<div class="side_filter">
-  <div class="filter_title d-flex">
-    <h6 class="filter_title">FILTER</h6>
-    <h6
-      id="clearAllBtn"
-      class="btn clear_all ms-auto"
-      hx-get="/api/method/sahayog_docs.circulars.doctype.circular.circular.get_list"
-      hx-target="#doc-list"
-    >
-      CLEAR ALL
-    </h6>
-  </div>
-
-  <div class="filter_content d-flex">
-    <form
-      id="filterForm"
-      hx-get="/api/method/sahayog_docs.circulars.doctype.circular.circular.get_time_list"
-      hx-target="#doc-list"
-      hx-params="*"
-    >
-      <div class="mb-3 d-flex">
-        <div class="select-container">
-          <select id="yearSelect" name="year">
-            <option selected disabled value="">Year</option>
-            <option value="2024-25">2024-25</option>
-            <option value="2023-24">2023-24</option>
-            <option value="2022-23">2022-23</option>
-            <option value="2021-22">2021-22</option>
-            <option value="2020-21">2020-21</option>
-            <option value="2019-20">2019-20</option>
-            <option value="2018-19">2018-19</option>
-          </select>
-        </div>
-        <div class="select-container ms-2">
-          <select id="monthSelect" name="month">
-            <option selected disabled value="">Month</option>
-            <option value="01">January</option>
-            <option value="02">February</option>
-            <option value="03">March</option>
-            <option value="04">April</option>
-            <option value="05">May</option>
-            <option value="06">June</option>
-            <option value="07">July</option>
-            <option value="08">August</option>
-            <option value="09">September</option>
-            <option value="10">October</option>
-            <option value="11">November</option>
-            <option value="12">December</option>
-          </select>
-        </div>
-        <div class="select-container ms-2">
-          <button type="submit" class="search-btn">
-            <i class="fas fa-search"></i>
-          </button>
-        </div>
-      </div>
-    </form>
-  </div>
-</div>
-
-<p id="selectedYear"></p>
 
 <script>
-  // Event listener to handle displaying the selected year
-  document.getElementById("yearSelect").addEventListener("change", function () {
-    var selectedValue = this.value;
-
-    // Log the selected year to the console
-    console.log("Selected Year:", selectedValue);
-
-    // Display the selected year on the page
-    var selectedYearElement = document.getElementById("selectedYear");
-    selectedYearElement.textContent = "Selected Year: " + selectedValue;
-
-    // Update hx-params attribute with the selected year as plain text
-    this.setAttribute("hx-params", selectedValue);
-  });
-
-  document
-    .getElementById("clearAllBtn")
-    .addEventListener("click", function (event) {
-      // Prevent default action if necessary
-      event.preventDefault();
-
-      // Reset the select fields to their default values
-      document.getElementById("yearSelect").selectedIndex = 0;
-      document.getElementById("monthSelect").selectedIndex = 0;
-
-      // Remove active class from all filter buttons
-      document.querySelectorAll(".btn-filter").forEach((btn) => {
-        btn.classList.remove("active");
-      });
-
-      // Add active class to the "All" button
-      document
-        .querySelector(".btn-filter:first-of-type")
-        .classList.add("active");
+  //to make btn active on click
+  // Active button toggling with icon change
+  const sideButtons = document.querySelectorAll(".side_btn");
+  function handleButtonClick(event) {
+    sideButtons.forEach((button) => {
+      button.classList.remove("active");
+      const img = button.querySelector("img");
+      img.src = button.dataset.inactiveSrc; // Set to inactive icon
     });
+    const clickedButton = event.currentTarget;
+    clickedButton.classList.add("active");
+    const clickedImg = clickedButton.querySelector("img");
+    clickedImg.src = clickedButton.dataset.activeSrc; // Set to active icon
 
-  /*function applyFilters() {
-    var yearValue = document.getElementById("yearSelect").value;
-    var monthValue = document.getElementById("monthSelect").value;
-
-    var params = {};
-
-    if (yearValue) {
-      params["year"] = yearValue;
+    // Check if the "Circular" button was clicked
+    if (clickedButton.id === "circular-btn") {
+      // Find and activate the "All" nav tab
+      const allButton = document.querySelector(".btn-filter:first-of-type");
+      if (allButton) {
+        allButton.click(); // Programmatically click the "All" button
+      }
     }
-
-    if (monthValue) {
-      params["month"] = monthValue;
-    }
-
-    // Convert params object to JSON string
-    var paramsJson = JSON.stringify(params);
-
-    // Update hx-params attribute of the form
-    document.getElementById("filterForm").setAttribute("hx-params", paramsJson);
-
-    // Trigger HTMX request
-    htmx.trigger("#filterForm", "submit");
-  }*/
-  document.body.addEventListener("htmx:afterOnLoad", function (evt) {
-    // Log the response to the console
-    console.log("Response received from server:", evt.detail.xhr.responseText);
-
-    // Optional: Display the response in an alert or console
-    if (!evt.detail.xhr.responseText.trim()) {
-      alert("No data found for the selected year.");
-    }
+  }
+  sideButtons.forEach((button) => {
+    button.addEventListener("click", handleButtonClick);
   });
 </script>
