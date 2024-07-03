@@ -22,6 +22,21 @@
     margin-right: 13px;
     margin-bottom: 3px;
   }
+
+  .back_btn {
+    bottom: 40px;
+    position: absolute;
+    color: #fff;
+    padding: 5px 15px;
+    background: #272727;
+    border-radius: 11px;
+    margin-left: 20px;
+  }
+  .back_icon {
+    height: 12px;
+    width: 12px;
+    margin-right: 10px;
+  }
 </style>
 
 <div class="d-grid side_btns gap-1">
@@ -70,6 +85,12 @@
   </button>
 </div>
 
+<div class="">
+  <button class="btn back_btn" id="back-btn">
+    <span><img src="/files/Back-arrow.png" class="back_icon" alt="" /></span
+    >Back to Support
+  </button>
+</div>
 <script>
   //to make btn active on click
   // Active button toggling with icon change
@@ -96,5 +117,10 @@
   }
   sideButtons.forEach((button) => {
     button.addEventListener("click", handleButtonClick);
+  });
+
+  //Redirect on home page
+  document.getElementById("back-btn").addEventListener("click", function () {
+    window.location.href = "/app";
   });
 </script>

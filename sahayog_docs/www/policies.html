@@ -252,9 +252,9 @@
         font-size: large;
       }
       #year {
-        background: #b83939;
+        background: #cc0000e6;
         padding: 0 4px;
-        border-radius: 2px;
+        border-radius: 5px;
       }
 
       /* Specific styles for headers based on document type */
@@ -294,6 +294,14 @@
         border: 1px solid #272727;
         border-radius: 12px;
       }*/
+
+      .user_icon {
+        width: 35px;
+        height: 35px;
+      }
+      .login-user {
+        align-items: center;
+      }
     </style>
 
     <script>
@@ -320,7 +328,8 @@
   </head>
 
   <body>
-    {% if frappe.session.user == "Guest" or frappe.session.user != "Guest" %}
+    {% if frappe.session.user != "Guest" %}
+
     <nav id="sidebar" class="d-flex flex-column">
       <div class="navbar-brand">
         <img class="logo" id="brand-logo" src="/files/Sahayog.png" alt="Logo" />
@@ -409,7 +418,25 @@
             </div>
           </form>
         </div>
-        <div class="current-user">{{frappe.session.user}}</div>
+        <!-- Display current user's email -->
+        <div class="current-user" id="current_user" style="display: none">
+          {{frappe.session.user}}
+        </div>
+
+        <!-- Container to display current user's full name -->
+        <div class="login-user d-flex gap-1">
+          <span
+            ><img class="user_icon" src="/files/userb26475.png" alt="user"
+          /></span>
+
+          <div
+            class="current-user-name"
+            hx-get="/api/method/sahayog_docs.circulars.doctype.circular.circular.get_user_full_name"
+            hx-trigger="load"
+            hx-target="this"
+            hx-vals='js:{"email": document.getElementById("current_user").textContent.trim()}'
+          ></div>
+        </div>
       </header>
 
       <div id="content">

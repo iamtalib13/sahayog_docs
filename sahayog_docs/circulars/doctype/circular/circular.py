@@ -92,6 +92,45 @@ def get_time_list(year=None, month=None):
     return Response(html_content)
 
 
+# get current user name
+@frappe.whitelist()
+def get_user_full_name(email):
+    # Fetch first name and last name from Employee where user_id is the given email
+    user_details = frappe.db.get_value(
+        "Employee", {"user_id": email}, ["first_name", "last_name"], as_dict=True
+    )
+
+    if user_details:
+        # Concatenate first name and last name to get the full name
+        full_name = (
+            f"{user_details.get('first_name')} {user_details.get('last_name')}".strip()
+        )
+        return Response(full_name)
+    else:
+        return Response("Guest User")
+
+
+# get current user name
+# @frappe.whitelist()
+# def get_user_full_name(email):
+#     employee = frappe.get_value(
+#         "Employee",
+#         {"user_id": email},
+#         ["first_name", "last_name", "designation"],
+#         as_dict=True,
+#     )
+
+#     if employee:
+#         first_name = employee.get("first_name") or ""
+#         last_name = employee.get("last_name") or ""
+#         full_name = " ".join(filter(None, [first_name, last_name]))
+#         designation = employee.get("designation") or ""
+
+#         return {"full_name": full_name.strip(), "designation": designation}
+#     else:
+#         return {"full_name": ("Guest User"), "designation": ""}
+
+
 # search funtion to handle the search functionality
 @frappe.whitelist(allow_guest=True)
 def search():
@@ -187,3 +226,13 @@ def capture():
 @frappe.whitelist(allow_guest=True)
 def check():
     return "Pong"
+
+
+@frappe.whitelist()
+def fetch_employee_data(employee_id):
+    # Use parameterized query to prevent SQL injection
+    sql_query = """SELECT employee_name,designation,branch FROM `tabEmployee` WHERE employee_id=%s"""
+    # Execute the query with the provided employee_id
+    result = frappe.db.sql(sql_query, (employee_id,), as_dict=True)
+
+    return result
