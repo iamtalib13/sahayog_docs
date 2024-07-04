@@ -231,7 +231,7 @@ def check():
 @frappe.whitelist()
 def fetch_employee_data(employee_id):
     # Use parameterized query to prevent SQL injection
-    sql_query = """SELECT employee_name,designation,branch FROM `tabEmployee` WHERE employee_id=%s"""
+    sql_query = """SELECT employee_name,designation,branch FROM `tabEmployee` WHERE user_id=%s"""
     # Execute the query with the provided employee_id
     result = frappe.db.sql(sql_query, (employee_id,), as_dict=True)
 
