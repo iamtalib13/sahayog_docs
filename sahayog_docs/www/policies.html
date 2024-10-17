@@ -28,10 +28,11 @@
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
       rel="stylesheet"
     /> -->
+
     <style>
       /*.badge {
-        margin-right: 5px;
-      }*/
+          margin-right: 5px;
+        }*/
       .star-rating {
         color: gold;
       }
@@ -39,7 +40,7 @@
       body {
         font-family: "Poppins", sans-serif;
         color: white;
-        background-color: #0f0f0f;
+        background-color: #1b1c31;
         font-size: 1rem;
         line-height: 1.5rem;
         font-weight: 400;
@@ -47,37 +48,31 @@
       }
 
       #sidebar {
-        background-color: #161515;
-        width: 250px;
-        position: fixed;
-        top: 0;
-        bottom: 0;
         padding: 15px 10px;
         overflow-y: auto;
-        z-index: 1;
+      }
+      .sidebar-container {
+        height: 100vh;
+        background-color: #222338;
       }
 
-      #header {
-        width: calc(100% - 250px);
-        position: fixed;
-        top: 0;
-        left: 250px;
-        padding: 10px 20px;
+      .header {
+        padding: 10px 0;
         color: #fff;
         display: flex;
         align-items: center;
         justify-content: space-between;
         z-index: 2;
-        background-color: #0f0f0f;
+        background-color: #1b1c31;
+        margin-left: 15px;
       }
 
       #filter-bar {
         display: flex;
-        top: 50px;
-        left: 250px;
-        padding: 10px 15px;
+
+        padding: 10px 0;
         z-index: 3;
-        background-color: #0f0f0f;
+        background-color: #1b1c31;
       }
 
       .forms {
@@ -116,23 +111,20 @@
       }
 
       #content {
-        margin-left: 250px;
-        margin-top: 80px;
-        width: calc(100% - 250px);
-        padding: 20px;
+        padding: 15px 0;
         overflow-y: auto;
         z-index: 0;
       }
 
       /*.nav-link:hover {
-        background-color: #5a5a5a;
-        color: #fff;
-      }
-
-      a.nav-link.active {
-        background-color: #fff;
-        color: #000;
-      }*/
+          background-color: #5a5a5a;
+          color: #fff;
+        }
+  
+        a.nav-link.active {
+          background-color: #fff;
+          color: #000;
+        }*/
 
       .form-inline .form-control {
         width: 300px;
@@ -152,7 +144,7 @@
         font-weight: 600;
       }
       .logo {
-        width: 230px;
+        width: 190px;
         height: 51px;
         cursor: pointer;
       }
@@ -248,9 +240,9 @@
         font-size: 35px;
       }
       /*.card-title {
-        height: 50px;
-        font-size: large;
-      }*/
+          height: 50px;
+          font-size: large;
+        }*/
       #year {
         background: #cc0000e6;
         padding: 0 4px;
@@ -291,9 +283,9 @@
         margin-bottom: 8px;
       }
       /* .create_forms:hover {
-        border: 1px solid #272727;
-        border-radius: 12px;
-      }*/
+          border: 1px solid #272727;
+          border-radius: 12px;
+        }*/
 
       .user_icon {
         width: 35px;
@@ -301,6 +293,82 @@
       }
       .login-user {
         align-items: center;
+        cursor: pointer;
+      }
+
+      /* sidebar style*/
+      button.btn.side_btn {
+        color: #fff;
+        background: transparent;
+        text-align: left;
+      }
+      button.btn.side_btn.active {
+        color: #000;
+        background: #fff;
+        text-align: left;
+        border-radius: 11px;
+      }
+
+      .nav_icon {
+        width: 18px;
+        height: 18px;
+        margin-right: 10px;
+        margin-bottom: 3px;
+      }
+      .home-button {
+        position: fixed;
+        bottom: 0;
+        margin-bottom: 20px;
+        padding: 10px 20px;
+      }
+      .dropdown-item:active {
+        background-color: #1b1c31;
+      }
+      .dropdown-item {
+        cursor: pointer;
+      }
+
+      /*.back-btn {
+        bottom: 40px;
+        color: #fff;
+        padding: 5px 15px;
+        background: #272727;
+        border-radius: 11px;
+       
+        margin-bottom: 20px;
+      }*/
+      .back_icon {
+        height: 12px;
+        width: 12px;
+        margin-right: 10px;
+      }
+
+      /*.col-2 {
+    flex: 0 0 auto;
+    width: 12.666667%;
+}*/
+      /* Full height sidebar on larger screens */
+      .left-container {
+        padding: 0;
+        height: 100vh;
+      }
+
+      .right-container {
+        padding: 0;
+        height: 100vh;
+      }
+
+      /* Style adjustments for smaller screens */
+      @media (max-width: 768px) {
+        .left-container {
+          height: auto;
+          padding-bottom: 20px;
+        }
+
+        .right-container {
+          padding: 10px;
+          height: auto;
+        }
       }
     </style>
 
@@ -330,128 +398,255 @@
   <body>
     {% if frappe.session.user != "Guest" %}
 
-    <nav id="sidebar" class="d-flex flex-column">
-      <div class="navbar-brand">
-        <img class="logo" id="brand-logo" src="/files/Sahayog.png" alt="Logo" />
-      </div>
-      <ul class="nav flex-column mt-4">
-        <li class="nav-item">
-          <!-- <div class="flt_heading px-2">
-            <span>
-              <img class="flt_icon" src="/files/filter.png" alt="" /> </span
-            >Filters
-          </div> -->
-          <div class="pt-2">
-            {% include "/templates/includes/sidebar_filter.html" %}
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-2 col-12 me-auto left-container">
+          <div class="sidebar-container">
+            <nav id="sidebar" class="d-flex flex-column">
+              <div class="navbar-brand">
+                <img
+                  class="logo"
+                  id="brand-logo"
+                  src="/files/Sahayog.png"
+                  alt="Logo"
+                />
+              </div>
+              <ul class="nav flex-column mt-4">
+                <li class="nav-item">
+                  <div class="d-grid side_btns gap-1">
+                    <button
+                      class="btn side_btn active"
+                      id="circular-btn"
+                      type="button"
+                      onclick="navigateTo('circular')"
+                      data-active-src="/files/home-icon-silhouette_69524.png"
+                      data-inactive-src="/files/home-icon-silhouette.png"
+                    >
+                      <span>
+                        <img
+                          class="nav_icon"
+                          src="/files/home-icon-silhouette_69524.png"
+                          alt="Circular Icon"
+                        />
+                      </span>
+                      Circular
+                    </button>
+
+                    <button
+                      class="btn side_btn"
+                      type="button"
+                      id="forms-btn"
+                      onclick="navigateTo('forms')"
+                      data-active-src="/files/exam_9316703.png"
+                      data-inactive-src="/files/exam (1).png"
+                    >
+                      <span>
+                        <img
+                          class="nav_icon"
+                          src="/files/exam (1).png"
+                          alt="Forms Icon"
+                        /> </span
+                      >Forms & Formats
+                    </button>
+                    {% set values = frappe.db.get_value('CMS User',
+                    frappe.session.user, ['user', 'requester', 'ho_approver',
+                    'com_approver', 'reports']) %} {% if values %} {% set
+                    active_user, requester, ho_approver, com_approver, reports =
+                    values %}
+
+                    <script>
+                      console.log("Active User: {{ active_user }}");
+                      console.log("Requester: {{ requester }}");
+                      console.log("HO Approver: {{ ho_approver }}");
+                      console.log("COM Approver: {{ com_approver }}");
+                      console.log("Reports: {{ reports }}");
+                    </script>
+
+                    {% if active_user == frappe.session.user %}
+                    <button
+                      class="btn side_btn"
+                      type="button"
+                      id="cms-btn"
+                      onclick="navigateTo('cms')"
+                      data-active-src="/files/web-management (1).png"
+                      data-inactive-src="/files/web-management.png"
+                    >
+                      <span>
+                        <img
+                          class="nav_icon"
+                          src="/files/web-management.png"
+                          alt="CMS Icon"
+                        />
+                      </span>
+                      CMS
+                    </button>
+                    {% endif %} {% else %}
+                    <script>
+                      console.log("No data found for CMS User.");
+                    </script>
+                    {% endif %}
+                  </div>
+
+                  <div class="home-button">
+                    <!-- Container to display current user's full name -->
+                    <div class="dropdown login-user d-flex gap-1">
+                      <span
+                        ><img
+                          class="user_icon"
+                          src="https://cdn-icons-png.flaticon.com/128/149/149071.png"
+                          alt="user"
+                      /></span>
+                      <div
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                        class="current-user-name dropdown-toggle"
+                        hx-get="/api/method/sahayog_docs.circulars.doctype.circular.circular.get_user_full_name"
+                        hx-trigger="load"
+                        hx-target="this"
+                        hx-vals='js:{"email": document.getElementById("current_user").textContent.trim()}'
+                      ></div>
+                      <!-- Dropdown Menu -->
+                      <ul
+                        class="dropdown-menu dropdown-menu-end"
+                        aria-labelledby="user-details"
+                      >
+                        <li>
+                          <a class="dropdown-item back-btn" id="back-btn"
+                            >Back to Support</a
+                          >
+                        </li>
+                        <li>
+                          <a class="dropdown-item logout-btn" id="logout-btn"
+                            >Logout</a
+                          >
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </li>
+                <!-- <li class="nav-item">
+                    <a class="nav-link create_forms" href="#">
+                      <span
+                        ><img class="forms" src="/files/writing (1).png" alt=""
+                      /></span>
+                      Forms & Formats</a
+                    >
+                  </li> -->
+              </ul>
+            </nav>
           </div>
-        </li>
-        <!-- <li class="nav-item">
-          <a class="nav-link create_forms" href="#">
-            <span
-              ><img class="forms" src="/files/writing (1).png" alt=""
-            /></span>
-            Forms & Formats</a
-          >
-        </li> -->
-      </ul>
-    </nav>
-
-    <div class="right-container" id="right-container">
-      <header id="header">
-        <div id="filter-bar">
-          {% set circular_count = frappe.db.count('Circular', {'type':
-          'Circular'}) %} {% set sop_count = frappe.db.count('Circular',
-          {'type': 'Process & Policies'}) %}
-          <div class="rounded-pill" role="group" aria-label="Filter Group">
-            <button
-              type="button"
-              class="btn btn-outline-secondary btn-filter active"
-              hx-get="/api/method/sahayog_docs.circulars.doctype.circular.circular.get_list"
-              hx-target="#doc-list"
-              onclick="handleFilterButtonClick(this)"
-            >
-              All
-              <span class="badge">{{circular_count + sop_count}}</span>
-            </button>
-
-            <button
-              type="button"
-              class="btn btn-outline-secondary btn-filter ms-2"
-              hx-get="/api/method/sahayog_docs.circulars.doctype.circular.circular.get_list"
-              hx-target="#doc-list"
-              hx-params='{"doc_type": "Circular"}'
-              onclick="handleFilterButtonClick(this)"
-            >
-              Circular<span class="badge">{{circular_count}}</span>
-            </button>
-            <button
-              type="button"
-              class="btn btn-outline-secondary btn-filter ms-2"
-              hx-get="/api/method/sahayog_docs.circulars.doctype.circular.circular.get_list"
-              hx-target="#doc-list"
-              hx-params='{"doc_type": "Process & Policies"}'
-              onclick="handleFilterButtonClick(this)"
-            >
-              Process & Policies <span class="badge">{{sop_count}}</span>
-            </button>
+        </div>
+        <!-- Content Section (Right) -->
+        <div class="col-md-10 col-12 right-container">
+          <div class="cms-container" id="cms-container" style="display: none">
+            {% include "/templates/includes/cms.html" %}
           </div>
-
-          <form
-            id="search-form"
-            class="form-inline ms-2"
-            hx-get="/api/method/sahayog_docs.circulars.doctype.circular.circular.search"
-            hx-trigger="submit"
-            hx-target="#doc-list"
-          >
-            <div class="search-container">
-              <input
-                id="search-input"
-                class="form-control"
-                type="search"
-                placeholder="Search"
-                aria-label="Search"
-                name="query"
-              />
-              <button id="search-btn" class="btn search-btn" type="submit">
-                <img class="search_icon" src="/files/find.png" alt="search" />
-              </button>
-            </div>
-          </form>
-        </div>
-        <!-- Display current user's email -->
-        <div class="current-user" id="current_user" style="display: none">
-          {{frappe.session.user}}
-        </div>
-
-        <!-- Container to display current user's full name -->
-        <div class="login-user d-flex gap-1">
-          <span
-            ><img class="user_icon" src="/files/userb26475.png" alt="user"
-          /></span>
-
           <div
-            class="current-user-name"
-            hx-get="/api/method/sahayog_docs.circulars.doctype.circular.circular.get_user_full_name"
-            hx-trigger="load"
-            hx-target="this"
-            hx-vals='js:{"email": document.getElementById("current_user").textContent.trim()}'
-          ></div>
-        </div>
-      </header>
+            class="formsFormat-container"
+            id="formsFormat-container"
+            style="display: none"
+          >
+            <h1>There is no Forms And Format</h1>
+          </div>
+          <div class="policy-container" id="policy-container">
+            <div class="header">
+              <div id="filter-bar">
+                {% set circular_count = frappe.db.count('Circular', {'type':
+                'Circular'}) %} {% set sop_count = frappe.db.count('Circular',
+                {'type': 'Process & Policies'}) %}
+                <div
+                  class="rounded-pill"
+                  role="group"
+                  aria-label="Filter Group"
+                >
+                  <button
+                    type="button"
+                    class="btn btn-outline-secondary btn-filter active"
+                    hx-get="/api/method/sahayog_docs.circulars.doctype.circular.circular.get_list"
+                    hx-target="#doc-list"
+                    onclick="handleFilterButtonClick(this)"
+                  >
+                    All
+                    <span class="badge">{{circular_count + sop_count}}</span>
+                  </button>
 
-      <div id="content">
-        <div class="time-filter">
-          {% include "/templates/includes/time_filter.html" %}
-        </div>
-        <div class="container-fluid">
-          <div class="row" id="doc-list">
-            {% include "/templates/includes/cards.html" %}
+                  <button
+                    type="button"
+                    class="btn btn-outline-secondary btn-filter ms-2"
+                    hx-get="/api/method/sahayog_docs.circulars.doctype.circular.circular.get_list"
+                    hx-target="#doc-list"
+                    hx-params='{"doc_type": "Circular"}'
+                    onclick="handleFilterButtonClick(this)"
+                  >
+                    Circular<span class="badge">{{circular_count}}</span>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-outline-secondary btn-filter ms-2"
+                    hx-get="/api/method/sahayog_docs.circulars.doctype.circular.circular.get_list"
+                    hx-target="#doc-list"
+                    hx-params='{"doc_type": "Process & Policies"}'
+                    onclick="handleFilterButtonClick(this)"
+                  >
+                    Process & Policies <span class="badge">{{sop_count}}</span>
+                  </button>
+                </div>
+
+                <form
+                  id="search-form"
+                  class="form-inline ms-2"
+                  hx-get="/api/method/sahayog_docs.circulars.doctype.circular.circular.search"
+                  hx-trigger="submit"
+                  hx-target="#doc-list"
+                >
+                  <div class="search-container">
+                    <input
+                      id="search-input"
+                      class="form-control"
+                      type="search"
+                      placeholder="Search"
+                      aria-label="Search"
+                      name="query"
+                    />
+                    <button
+                      id="search-btn"
+                      class="btn search-btn"
+                      type="submit"
+                    >
+                      <img
+                        class="search_icon"
+                        src="/files/find.png"
+                        alt="search"
+                      />
+                    </button>
+                  </div>
+                </form>
+              </div>
+              <!-- Display current user's email -->
+              <div class="current-user" id="current_user" style="display: none">
+                {{frappe.session.user}}
+              </div>
+            </div>
+
+            <div id="content" class="content">
+              <div class="time-filter">
+                {% include "/templates/includes/time_filter.html" %}
+              </div>
+              <div class="container-fluid">
+                <div class="row" id="doc-list">
+                  {% include "/templates/includes/cards.html" %}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
     {% else %} {% include "/templates/includes/not-found.html" %} {% endif %}
+
+    <!-- Include your routing file -->
+    <!--<script src="router.js"></script>-->
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
@@ -469,6 +664,61 @@
     ></script>
 
     <script>
+      function navigateTo(tabName) {
+        // Hide all containers
+        document.getElementById("cms-container").style.display = "none";
+        document.getElementById("formsFormat-container").style.display = "none";
+        document.getElementById("policy-container").style.display = "none";
+
+        // Update URL hash
+        window.location.hash = tabName;
+
+        // Show the selected tab's container
+        if (tabName === "cms") {
+          document.getElementById("cms-container").style.display = "block";
+        } else if (tabName === "forms") {
+          document.getElementById("formsFormat-container").style.display =
+            "block";
+        } else if (tabName === "circular") {
+          document.getElementById("policy-container").style.display = "block";
+
+          // Find and activate the "All" nav tab
+          const allButton = document.querySelector(".btn-filter:first-of-type");
+          if (allButton) {
+            allButton.click(); // Programmatically click the "All" button
+          }
+        }
+
+        // Update the active button state
+        const sideButtons = document.querySelectorAll(".side_btn");
+        sideButtons.forEach((button) => {
+          button.classList.remove("active");
+          const img = button.querySelector("img");
+          img.src = button.dataset.inactiveSrc; // Set to inactive icon
+        });
+
+        const activeButton = document.getElementById(tabName + "-btn");
+        if (activeButton) {
+          activeButton.classList.add("active");
+          const clickedImg = activeButton.querySelector("img");
+          clickedImg.src = activeButton.dataset.activeSrc; // Set to active icon
+        }
+      }
+
+      // Set active button on page load based on hash or default
+      document.addEventListener("DOMContentLoaded", function () {
+        // Get the current hash from the URL
+        const hash = window.location.hash.replace("#", "");
+
+        // If there's a hash, navigate to that tab
+        if (hash) {
+          navigateTo(hash); // Ensure this calls the navigateTo function correctly
+        } else {
+          // If there's no hash, default to showing the first tab (e.g., 'circulars')
+          navigateTo("circular");
+        }
+      });
+
       // Get the logo image element
       const logo = document.getElementById("brand-logo");
 
@@ -512,6 +762,79 @@
           ).doc_type;
         }
       });
+
+      /********************* Sidebar Script *********************/
+      // const sideButtons = document.querySelectorAll(".side_btn");
+
+      /*function handleButtonClick(event) {
+         // Hide all containers
+         document.getElementById("cms-container").style.display = "none";
+         document.getElementById("formsFormat-container").style.display = "none";
+         document.getElementById("policy-container").style.display = "none";
+
+         // Remove 'active' class from all buttons
+         sideButtons.forEach((button) => {
+           button.classList.remove("active");
+           const img = button.querySelector("img");
+           img.src = button.dataset.inactiveSrc; // Set to inactive icon
+         });
+
+         // Show the clicked button's container and update icon
+         const clickedButton = event.currentTarget;
+         clickedButton.classList.add("active");
+         const clickedImg = clickedButton.querySelector("img");
+         clickedImg.src = clickedButton.dataset.activeSrc; // Set to active icon
+
+         // Display corresponding container
+         if (clickedButton.id === "cms-btn") {
+           document.getElementById("cms-container").style.display = "block";
+         } else if (clickedButton.id === "forms-btn") {
+           document.getElementById("formsFormat-container").style.display =
+             "block";
+         } else if (clickedButton.id === "circular-btn") {
+           document.getElementById("policy-container").style.display = "block";
+           // Find and activate the "All" nav tab
+           const allButton = document.querySelector(".btn-filter:first-of-type");
+           if (allButton) {
+             allButton.click(); // Programmatically click the "All" button
+           }
+         }
+       }
+
+       sideButtons.forEach((button) => {
+         button.addEventListener("click", handleButtonClick);
+       });  */
+
+      // Redirect on home page
+      document
+        .getElementById("back-btn")
+        .addEventListener("click", function () {
+          window.location.href = "/app";
+        });
+
+      // Logout
+      document
+        .getElementById("logout-btn")
+        .addEventListener("click", function () {
+          fetch("/api/method/logout", {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          })
+            .then((response) => {
+              if (response.ok) {
+                console.log("Logged out successfully");
+                window.location.replace("/login"); // Redirect to login
+              } else {
+                console.error("Failed to log out");
+              }
+            })
+            .catch((error) => {
+              console.error("Error during logout:", error);
+            });
+        });
     </script>
   </body>
 </html>

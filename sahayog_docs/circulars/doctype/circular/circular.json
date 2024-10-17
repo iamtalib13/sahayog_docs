@@ -94,7 +94,7 @@
    "fieldname": "type",
    "fieldtype": "Select",
    "label": "Type",
-   "options": "\nCircular\nProcess & Policies",
+   "options": "\nCircular\nProcess & Policies\nForms & Formats",
    "reqd": 1
   },
   {
@@ -112,7 +112,7 @@
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-07-03 15:12:13.603055",
+ "modified": "2024-10-16 12:50:33.789883",
  "modified_by": "Administrator",
  "module": "Circulars",
  "name": "Circular",

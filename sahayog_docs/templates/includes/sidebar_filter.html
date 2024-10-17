@@ -68,6 +68,7 @@
       <img class="nav_icon" src="/files/exam (1).png" alt="Forms Icon" /> </span
     >Forms & Formats
   </button>
+
   <button
     class="btn side_btn"
     type="button"
@@ -122,5 +123,20 @@
   //Redirect on home page
   document.getElementById("back-btn").addEventListener("click", function () {
     window.location.href = "/app";
+  });
+
+  //Redirect on home page
+  /*document.getElementById("cms-btn").addEventListener("click", function () {
+    alert ("This is CMS");
+  });*/
+
+  document.getElementById("cms-btn").addEventListener("click", function () {
+    const cmsContent = document.getElementById("cms-content");
+    //const rightContainer=
+    if (cmsContent.style.display === "none") {
+      cmsContent.style.display = "block";
+    } else {
+      cmsContent.style.display = "none";
+    }
   });
 </script>

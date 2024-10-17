@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cash Management System</title>
+    <style>
+      .cms-header {
+        background: linear-gradient(to right, #252850, #151743);
+        color: white;
+        padding: 10px 20px;
+        /* display: flex;*/
+        align-items: center;
+        justify-content: space-between;
+        font-family: Arial, sans-serif;
+      }
+      .cms-logo {
+        display: flex;
+        align-items: center;
+      }
+      .cms-logo img {
+        width: 24px;
+        height: 24px;
+        margin-right: 10px;
+      }
+      .cms-logo h1 {
+        font-size: 30px;
+        font-weight: bolder;
+        margin: 0;
+      }
+      .cms-tabs-container {
+        display: flex;
+        /* justify-content: space-between; */
+        padding: 10px;
+      }
+      .cms-search-bar {
+        background-color: #3f3f3f;
+        border-radius: 20px;
+        padding: 5px 15px;
+        width: 210px;
+        margin-right: 10px;
+      }
+      .cms-search-bar input {
+        background: transparent;
+        border: none;
+        color: #ffff;
+        width: 100%;
+        padding: 5px;
+        font-size: 14px;
+        outline: none;
+      }
+      .cms-status-buttons {
+        display: flex;
+        gap: 0;
+        border-radius: 25px;
+        overflow: hidden;
+        position: relative;
+        background: #3f3f3f;
+      }
+      .cms-status-buttons::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #3f3f3f;
+        z-index: -1; /* Place it behind the buttons */
+        border-radius: 20px;
+      }
+      .cms-status-button {
+        background-color: #3f3f3f;
+        border: none;
+        border-radius: 25px; /* Round buttons to match container */
+        color: white;
+        padding: 5px 15px;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s;
+        flex: 1; /* Make buttons take up equal space */
+      }
+      .cms-status-button:first-child {
+        border-top-left-radius: 25px;
+        border-bottom-left-radius: 25px;
+      }
+      .cms-status-button:last-child {
+        border-top-right-radius: 25px;
+        border-bottom-right-radius: 25px;
+      }
+      .cms-status-button.selected {
+        background-color: white;
+        color: #26273b; /* Change text color when selected */
+        border: 2px solid #26273b; /* Add border to selected button */
+      }
+      .cms-status-count {
+        border-radius: 20%;
+        padding: 2px 6px;
+        margin-left: 5px;
+        font-size: 12px;
+        color: white; /* Default color, will be overridden by specific classes */
+      }
+      .cms-status-pending .cms-status-count {
+        background-color: #a282ff;
+        color: #002289;
+      }
+      .cms-status-approved .cms-status-count {
+        background-color: #e2ffe1;
+        color: #05bf02;
+      }
+      .cms-status-rejected .cms-status-count {
+        background-color: #ffb0b0;
+        color: #ff0000;
+      }
+      .cms-action-buttons {
+        display: flex;
+        gap: 10px;
+      }
+      .cms-action-button {
+        background-color: white;
+        border: none;
+        border-radius: 15px;
+        color: black;
+        padding: 5px 15px;
+        font-size: 14px;
+      }
+      .list-header {
+        background: linear-gradient(
+          to right,
+          #3f3f5c 13%,
+          #1f1f2d 49%
+        ); /* Adjusted for darker appearance */
+        width: 100%;
+        height: 50px;
+        color: white;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: left;
+        font-size: 28px; /* Adjust font size if needed */
+      }
+
+      .list-header-text {
+        margin-left: 20px; /* Adjust this value to set the desired margin */
+      }
+
+      .cms-records-container {
+        width: 100%;
+        margin: -6px 0;
+        overflow-x: auto;
+        padding: 10px;
+        border-radius: 6px;
+      }
+
+      .cms-records {
+        width: 100%;
+        border-collapse: collapse;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 14px;
+      }
+
+      .cms-records thead {
+        background-color: #26273b;
+      }
+
+      .cms-records thead th {
+        padding: 12px;
+        text-align: left;
+        font-weight: 900;
+
+        color: #ffffff;
+      }
+
+      .cms-records tbody td {
+        padding: 15px 10px;
+        vertical-align: middle;
+
+        color: #ffffff; /* White font color for records */
+      }
+
+      .cms-records tbody tr:hover {
+        color: whitesmoke;
+      }
+      .cms-records tr {
+        color: whitesmoke;
+      }
+      .cms-records th,
+      .cms-records td {
+        padding: 8px 16px;
+      }
+
+      .cms-records td {
+        color: #24292e;
+      }
+
+      .cms-records-container::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .cms-records-container::-webkit-scrollbar-thumb {
+        background-color: #c1c1c1;
+        border-radius: 6px;
+      }
+      .cms-table-row {
+        transition: background-color 0.3s; /* Smooth transition for the background color */
+      }
+
+      .cms-table-row:hover {
+        background-color: hsla(
+          0,
+          0%,
+          100%,
+          0.1
+        ); /* Light background on hover */
+      }
+      .cms-table-row a {
+        text-decoration: none; /* Underline on hover */
+      }
+      .cms-table-row a:hover {
+        text-decoration: underline; /* Underline on hover */
+      }
+      div#no_records {
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="cms-header">
+      <div class="cms-logo">
+        <img
+          src="/assets/cash_management_system/images/money-flow.png"
+          alt="Money Flow Icon"
+        />
+        <h1>Cash Management System</h1>
+      </div>
+      <div class="cms-tabs-container">
+        <div class="cms-search-bar">
+          <input
+            type="text"
+            placeholder="Enter ID"
+            id="searchInput"
+            onkeyup="searchTable()"
+          />
+        </div>
+        <div class="cms-status-buttons">
+          {% set values = frappe.db.get_value('CMS User', frappe.session.user,
+          ['user', 'requester', 'com_approver', 'ho_approver', 'reports']) %} {%
+          if values %} {% set active_user, requester, com_approver, ho_approver,
+          reports = values %} {% if requester == 1 %} {% set
+          requester_pending_count = frappe.db.count('CMS', { 'owner':
+          frappe.session.user, 'status': ['in', ['Draft', 'Pending']] }) %}
+          <button class="cms-status-button cms-status-pending selected">
+            Pending
+            <span class="cms-status-count">{{ requester_pending_count }}</span>
+          </button>
+
+          {% elif com_approver == 1 %} {% set com_approver_pending_count =
+          frappe.db.count('CMS', { 'stage_1_emp_user': frappe.session.user,
+          'status': ['in', ['Pending']], 'stage_1_emp_status': 'Pending' }) %}
+          <button class="cms-status-button cms-status-pending selected">
+            Pending
+            <span class="cms-status-count"
+              >{{ com_approver_pending_count }}</span
+            >
+          </button>
+
+          {% elif ho_approver == 1 %} {% set ho_approver_pending_count =
+          frappe.db.count('CMS', { 'stage_2_emp_user': frappe.session.user,
+          'stage_2_emp_status': ['in', ['Pending']] }) %}
+          <button class="cms-status-button cms-status-pending selected">
+            Pending
+            <span class="cms-status-count"
+              >{{ ho_approver_pending_count }}</span
+            >
+          </button>
+
+          {% endif %} {% else %}
+          <button class="cms-status-button cms-status-pending selected">
+            Pending
+            <span class="cms-status-count">0</span>
+          </button>
+          {% endif %}
+
+          <!-- Count for APPROVED for Requester/com_approver/ho_approver -->
+          {% set values = frappe.db.get_value('CMS User', frappe.session.user,
+          ['user', 'requester', 'com_approver', 'ho_approver', 'reports']) %} {%
+          if values %} {% set active_user, requester, com_approver, ho_approver,
+          reports = values %} {% if requester == 1 %} {% set
+          requester_approved_count = frappe.db.count('CMS', { 'owner':
+          frappe.session.user, 'status': ['in', ['Approved']] }) %}
+          <button class="cms-status-button cms-status-approved">
+            Approved
+            <span class="cms-status-count">{{requester_approved_count}}</span>
+          </button>
+
+          {% elif com_approver == 1 %} {% set com_approver_approved_count =
+          frappe.db.count('CMS', { 'stage_1_emp_user': frappe.session.user,
+          'stage_1_emp_status': 'Approved' }) %}
+
+          <button class="cms-status-button cms-status-approved">
+            Approved
+            <span class="cms-status-count"
+              >{{com_approver_approved_count}}</span
+            >
+          </button>
+
+          {% elif ho_approver == 1 %} {% set ho_approver_approved_count =
+          frappe.db.count('CMS', { 'stage_2_emp_user': frappe.session.user,
+          'status': ['in', ['Approved']], 'stage_2_emp_status': 'Approved' }) %}
+          <button class="cms-status-button cms-status-approved">
+            Approved
+            <span class="cms-status-count">{{ho_approver_approved_count}}</span>
+          </button>
+
+          {% endif %} {% else %}
+          <button class="cms-status-button cms-status-approved">
+            Approved <span class="cms-status-count">0</span>
+          </button>
+          {% endif %}
+          <!-- Count for Rejected for Requester/com_approver/ho_approver -->
+          {% set values = frappe.db.get_value('CMS User', frappe.session.user,
+          ['user', 'requester', 'com_approver', 'ho_approver', 'reports']) %} {%
+          if values %} {% set active_user, requester, com_approver, ho_approver,
+          reports = values %} {% if requester == 1 %} {% set
+          requester_rejected_count = frappe.db.count('CMS', { 'owner':
+          frappe.session.user, 'status': ['in', ['Rejected']] }) %}
+          <button class="cms-status-button cms-status-rejected">
+            Rejected
+            <span class="cms-status-count">{{requester_rejected_count}}</span>
+          </button>
+
+          {% elif com_approver == 1 %} {% set com_approver_rejected_count =
+          frappe.db.count('CMS', { 'stage_1_emp_user': frappe.session.user,
+          'stage_1_emp_status': 'Rejected' }) %}
+
+          <button class="cms-status-button cms-status-rejected">
+            Rejected
+            <span class="cms-status-count"
+              >{{com_approver_rejected_count}}</span
+            >
+          </button>
+
+          {% elif ho_approver == 1 %} {% set ho_approver_rejected_count =
+          frappe.db.count('CMS', { 'stage_2_emp_user': frappe.session.user,
+          'status': ['in', ['Rejected']], 'stage_2_emp_status': 'Rejected' }) %}
+          <button class="cms-status-button cms-status-rejected">
+            Rejected
+            <span class="cms-status-count">{{ho_approver_rejected_count}}</span>
+          </button>
+
+          {% endif %} {% else %}
+          <button class="cms-status-button cms-status-rejected">
+            Rejected <span class="cms-status-count">0</span>
+          </button>
+          {% endif %}
+        </div>
+        <div class="cms-action-buttons ms-auto">
+          {% set values = frappe.db.get_value('CMS User', frappe.session.user,
+          ['user', 'requester', 'com_approver', 'ho_approver', 'reports']) %} {%
+          if values %} {% set active_user, requester, com_approver, ho_approver,
+          reports = values %}
+
+          <script>
+            console.log("Active User: {{ active_user }}");
+            console.log("Requester: {{ requester }}");
+            console.log("COM Approver: {{ com_approver }}");
+            console.log("HO Approver: {{ ho_approver }}");
+            console.log("Reports: {{ reports }}");
+          </script>
+
+          {% if requester == 1 %}
+          <button
+            class="cms-action-button"
+            onclick="window.location.href='/app/cms/new-cms';"
+          >
+            Create
+          </button>
+          {% endif %} {% if reports == 1 %}
+          <button
+            class="cms-action-button"
+            onclick="window.location.href='/app/query-report/CMS%20Report';"
+          >
+            Report
+          </button>
+          {% endif %} {% else %}
+          <script>
+            console.log("No data found for CMS User.");
+          </script>
+          {% endif %}
+        </div>
+      </div>
+    </header>
+
+    <div class="list-header" id="list-header">
+      <span class="list-header-text"></span>
+    </div>
+
+    <div class="cms-records-container" id="cms-records-container">
+      <table class="cms-records" id="cms-records">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Status</th>
+            <th>Branch</th>
+            <th>Approval Tracker</th>
+            <th>Modified</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Table rows will be dynamically inserted here -->
+        </tbody>
+      </table>
+      <div class="no_records" id="no_records" style="display: none"></div>
+    </div>
+
+    <script>
+      function searchTable() {
+        // Get the search input value
+        const input = document
+          .getElementById("searchInput")
+          .value.toLowerCase();
+
+        // Get the table and its rows
+        const table = document.getElementById("cms-records");
+        const rows = table.getElementsByTagName("tr");
+
+        let noMatch = true; // Track if any match is found
+
+        // Loop through the rows, skipping the first row (header)
+        for (let i = 1; i < rows.length; i++) {
+          // Get the ID and Name columns
+          const idCell = rows[i].getElementsByTagName("td")[0]; // Assuming ID is in the first column
+          const nameCell = rows[i].getElementsByTagName("td")[1]; // Assuming Name is in the second column
+
+          if (idCell || nameCell) {
+            const idText = idCell.textContent || idCell.innerText;
+            const nameText = nameCell.textContent || nameCell.innerText;
+
+            // If the input value matches the ID or Name, display the row
+            if (
+              idText.toLowerCase().includes(input) ||
+              nameText.toLowerCase().includes(input)
+            ) {
+              rows[i].style.display = "";
+              noMatch = false; // Set false if a match is found
+            } else {
+              rows[i].style.display = "none"; // Hide non-matching rows
+            }
+          }
+        }
+
+        // Show 'no records' message if no match found
+        const noRecordsDiv = document.getElementById("no_records");
+        if (noMatch) {
+          noRecordsDiv.style.display = "block";
+          noRecordsDiv.innerHTML = "No matching records found";
+        } else {
+          noRecordsDiv.style.display = "none";
+        }
+      }
+
+      let selectedStatus = "Pending"; // Default status
+
+      // Mapping for status
+      const statusMapping = {
+        Pending: ["Pending", "Draft"],
+        Approved: ["Approved"],
+        Rejected: ["Rejected"],
+      };
+
+      let allRecords = []; // Store all records here
+      async function fetchRecords() {
+        try {
+          // Get the statuses to filter by based on selected status
+          const statuses = statusMapping[selectedStatus] || [];
+          console.log("Statuses to filter by:", statuses);
+
+          let response = await fetch(
+            `/api/method/cash_management_system.task.get_cms_records?status=${encodeURIComponent(
+              JSON.stringify(statuses)
+            )}`
+          );
+
+          if (!response.ok) {
+            throw new Error(
+              `Network response was not ok: ${response.statusText}`
+            );
+          }
+
+          let data = await response.json();
+          console.log("Fetched Data:", data.message);
+
+          // Check for server messages
+          if (data._server_messages) {
+            let serverMessages;
+            try {
+              serverMessages = JSON.parse(data._server_messages);
+              console.log("Server Messages:", serverMessages);
+            } catch (e) {
+              console.error("Error parsing server messages:", e);
+            }
+
+            // Extract user type from messages
+            serverMessages.forEach((message) => {
+              let parsedMessage = JSON.parse(message);
+              if (parsedMessage.message.includes("User type")) {
+                userType = parsedMessage.message.split(": ")[1]; // Extract the user type
+                console.log("User type:", userType);
+              }
+            });
+          }
+
+          const records = data.message;
+          console.log("Records:", records);
+
+          const tableData = records.message || []; // Handle potential null case
+          console.log("tableData:", tableData);
+
+          const tableBody = document.querySelector("#cms-records tbody");
+          tableBody.innerHTML = ""; // Clear existing rows
+
+          // Store all records in the global variable
+          allRecords = records.message;
+
+          renderRecords(allRecords);
+        } catch (error) {
+          console.error("Error fetching records:", error);
+          alert(`Error fetching records: ${error.message}`);
+        }
+      }
+
+      function renderRecords(records) {
+        const tableBody = document.querySelector("#cms-records tbody"); // Select the table
+        tableBody.innerHTML = ""; // Clear previous table content
+
+        function timeAgo(dateString) {
+          const now = new Date();
+          const modifiedDate = new Date(dateString);
+          const diffInSeconds = Math.floor((now - modifiedDate) / 1000);
+
+          const units = [
+            { name: "year", seconds: 60 * 60 * 24 * 365 },
+            { name: "month", seconds: 60 * 60 * 24 * 30 },
+            { name: "day", seconds: 60 * 60 * 24 },
+            { name: "hour", seconds: 60 * 60 },
+            { name: "minute", seconds: 60 },
+            { name: "second", seconds: 1 },
+          ];
+
+          for (const unit of units) {
+            const interval = Math.floor(diffInSeconds / unit.seconds);
+            if (interval >= 1) {
+              return `${interval} ${unit.name}${interval > 1 ? "s" : ""} ago`;
+            }
+          }
+          return "just now";
+        }
+
+        if (Array.isArray(records) && records.length > 0) {
+          records.forEach((record, index) => {
+            const row = document.createElement("tr");
+            row.classList.add("cms-table-row"); // Add class for hover effect
+            row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>
+                        <div style="display: flex; align-items: center;">
+                            ${getRecordImage(record.name)}
+                            <a href="/app/cms/${encodeURIComponent(
+                              record.name || ""
+                            )}" target="_blank" style="color: inherit;">
+                                ${(record.name || "").toUpperCase()}
+                            </a>
+                        </div>
+                    </td>
+                    <td>
+                        <div style="background-color: ${getStatusBackground(
+                          record.status
+                        )}; text-align: center; position: relative;    display: inline-block;
+                      padding: 5px 15px; 
+                      border-radius: 20px; ">
+                            <div style="background-color: ${getStatusDotColor(
+                              record.status
+                            )};  display: inline-block;
+                        width: 5px;   
+                        height: 5px; 
+                        border-radius: 50%;   transform: translateY(-50%); /* Adjust for perfect centering */"></div>
+                            <span style="color: ${getStatusTextColor(
+                              record.status
+                            )};">${record.status || ""}</span>
+                        </div>
+                    </td>
+                    <td>${record.branch || ""}</td>
+                    <td>${getStageStatusIcons(record)}</td>
+                    <td>${timeAgo(record.modified) || ""}</td>
+                `;
+            tableBody.appendChild(row);
+          });
+          // Get the no_records div
+          const noRecordsDiv = document.getElementById("no_records");
+          noRecordsDiv.style.display = "none";
+        } else {
+          console.log("No records found.");
+
+          // Get the no_records div
+          const noRecordsDiv = document.getElementById("no_records");
+          noRecordsDiv.style.display = "block";
+
+          // Set the inner HTML of the no_records div
+          noRecordsDiv.innerHTML = `
+            <div>
+              <img src="/assets/cash_management_system/images/no_records.png" alt="No records found" width="300" height="300">
+            </div>
+            <p>No records found.</p>
+          `;
+        }
+      }
+
+      // Helper functions
+      function getRecordImage(name) {
+        const typeImageMap = {
+          DEPOSIT: "deposit.png",
+          WITHDRAW: "withdraw.png",
+          CIT: "cit1.png",
+        };
+        for (const type in typeImageMap) {
+          if (name.startsWith(type)) {
+            return `<img src="/assets/cash_management_system/images/${typeImageMap[type]}" alt="${type}" width="30" height="30" style="margin-right: 5px;">`;
+          }
+        }
+        return "";
+      }
+
+      function getStatusBackground(status) {
+        return status === "Pending"
+          ? "#694bab"
+          : status === "Approved"
+          ? "#02bc7d"
+          : status === "Rejected"
+          ? "#fff5f5"
+          : "#7a7a7a";
+      }
+
+      function getStatusDotColor(status) {
+        return status === "Pending"
+          ? "#eae8fe"
+          : status === "Approved"
+          ? "#eaf5ee"
+          : status === "Rejected"
+          ? "#c53030"
+          : "#ead7d7";
+      }
+
+      function getStatusTextColor(status) {
+        return status === "Pending"
+          ? "#eae8fe"
+          : status === "Approved"
+          ? "#eaf5ee"
+          : status === "Rejected"
+          ? "#c53030"
+          : "#fffff";
+      }
+
+      function getStageStatusIcons(record) {
+        return `
+            ${getStageIcon(
+              record.stage_1_emp_status
+            )} COM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            ${getStageIcon(record.stage_2_emp_status)} HO
+        `;
+      }
+
+      function getStageIcon(stageStatus) {
+        const icons = {
+          Disabled: "disable.png",
+          Pending: "pending.png",
+          Approved: "approved.png",
+          Rejected: "rejected.png",
+        };
+        const icon = icons[stageStatus] || "disable.png"; // Default to disabled icon
+        return `<img src="/assets/cash_management_system/images/${icon}" alt="${stageStatus}" width="30" height="30">`;
+      }
+
+      function setupEventListeners() {
+        document.querySelectorAll(".cms-status-button").forEach((button) => {
+          button.addEventListener("click", () => {
+            document
+              .querySelectorAll(".cms-status-button")
+              .forEach((btn) => btn.classList.remove("selected"));
+            button.classList.add("selected");
+
+            selectedStatus = button.classList.contains("cms-status-approved")
+              ? "Approved"
+              : button.classList.contains("cms-status-rejected")
+              ? "Rejected"
+              : "Pending";
+
+            console.log("Selected Status:", selectedStatus);
+            fetchRecords();
+          });
+        });
+      }
+
+      // Set up event listeners and fetch records initially
+      setupEventListeners();
+      fetchRecords();
+
+      function updateHeaderBackground(status) {
+        let gradient;
+
+        switch (status) {
+          case "approved":
+            gradient =
+              "linear-gradient(to right, rgb(40, 168, 48), rgb(20, 100, 30))"; // Green gradient
+            break;
+          case "rejected":
+            gradient = "linear-gradient(to right, #FFB0B0, #FF0000)"; // Red gradient
+            break;
+          case "pending":
+          default:
+            gradient = "linear-gradient(to right, #252850, #151743)"; // Default gradient
+            break;
+        }
+
+        // Update header background
+        document.querySelector(".cms-header").style.background = gradient;
+      }
+
+      function updateListHeader(status) {
+        let gradient;
+        let text;
+        let count;
+
+        switch (status) {
+          case "approved":
+            gradient = "linear-gradient(to right, #005b08, #005b08)"; // Dark green for approved
+            text = "Approved";
+            count = ""; // Replace with dynamic count if needed
+            break;
+          case "rejected":
+            gradient = "linear-gradient(to right, #FFB0B0, #830000)"; // Lighter red for rejected
+            text = "Rejected";
+            count = ""; // Replace with dynamic count if needed
+            break;
+          case "pending":
+          default:
+            gradient = "linear-gradient(to right, #2E3388, #11166C)"; // Default gradient for pending
+            text = "Pending";
+            count = ""; // Replace with dynamic count if needed
+            break;
+        }
+
+        // Update list-header text and count
+        const listHeader = document.getElementById("list-header");
+        listHeader.querySelector(
+          ".list-header-text"
+        ).textContent = `${text} ${count}`;
+        listHeader.style.background = gradient; // Apply gradient as background
+      }
+
+      // Initialize header and list header
+      updateHeaderBackground("pending"); // Default to pending background
+      updateListHeader("pending"); // Default to pending background
+
+      document.querySelectorAll(".cms-status-button").forEach((button) => {
+        button.addEventListener("click", () => {
+          document
+            .querySelectorAll(".cms-status-button")
+            .forEach((btn) => btn.classList.remove("selected"));
+          button.classList.add("selected");
+
+          // Determine which status was clicked
+          const status = button.classList.contains("cms-status-approved")
+            ? "approved"
+            : button.classList.contains("cms-status-rejected")
+            ? "rejected"
+            : "pending";
+
+          // Update header background and list header based on selected status
+          updateHeaderBackground(status);
+          updateListHeader(status);
+        });
+      });
+    </script>
+  </body>
+</html>

@@ -95,19 +95,17 @@ def get_time_list(year=None, month=None):
 # get current user name
 @frappe.whitelist()
 def get_user_full_name(email):
-    # Fetch first name and last name from Employee where user_id is the given email
+    # Fetch first name from Employee where user_id is the given email
     user_details = frappe.db.get_value(
-        "Employee", {"user_id": email}, ["first_name", "last_name"], as_dict=True
+        "Employee", {"user_id": email}, ["first_name"], as_dict=True
     )
 
     if user_details:
-        # Concatenate first name and last name to get the full name
-        full_name = (
-            f"{user_details.get('first_name')} {user_details.get('last_name')}".strip()
-        )
-        return Response(full_name)
+        # Return the first name
+        return Response(user_details.get('first_name', "Guest User"))
     else:
         return Response("Guest User")
+
 
 
 # get current user name
