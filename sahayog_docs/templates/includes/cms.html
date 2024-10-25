@@ -139,6 +139,19 @@
         align-items: center;
         justify-content: left;
         font-size: 28px; /* Adjust font size if needed */
+        position: relative; /* Initially not fixed */
+        transition: top 0.3s ease, background 0.3s ease; /* Smooth transition for top and background */
+        z-index: 1000;
+      }
+
+      .list-header.fixed {
+        position: fixed;
+        top: 0;
+        background: linear-gradient(
+          to right,
+          #2b2f56 13%,
+          #191a3a 49%
+        ); /* Slightly different color when fixed, optional */
       }
 
       .list-header-text {
@@ -148,9 +161,16 @@
       .cms-records-container {
         width: 100%;
         margin: -6px 0;
-        overflow-x: auto;
+        overflow: hidden; /* Hide default overflow */
         padding: 10px;
         border-radius: 6px;
+        position: relative; /* Required for the fixed header */
+      }
+
+      .table-wrapper {
+        max-height: 400px; /* Set the max height for scrollable body */
+        overflow-y: auto; /* Enable vertical scrolling */
+        overflow-x: hidden; /* Hide horizontal scrollbar */
       }
 
       .cms-records {
@@ -162,36 +182,31 @@
 
       .cms-records thead {
         background-color: #26273b;
+        position: sticky; /* Sticky header */
+        top: 0; /* Stick the header to the top */
+        z-index: 100; /* Ensure it stays on top of the scrollable body */
       }
 
       .cms-records thead th {
         padding: 12px;
         text-align: left;
         font-weight: 900;
-
         color: #ffffff;
       }
 
       .cms-records tbody td {
         padding: 15px 10px;
         vertical-align: middle;
-
-        color: #ffffff; /* White font color for records */
+        color: #d2d7db; /* Dark color for table content */
       }
 
       .cms-records tbody tr:hover {
-        color: whitesmoke;
+        background-color: #3a3f54; /* Add hover effect for rows */
       }
-      .cms-records tr {
-        color: whitesmoke;
-      }
+
       .cms-records th,
       .cms-records td {
         padding: 8px 16px;
-      }
-
-      .cms-records td {
-        color: #24292e;
       }
 
       .cms-records-container::-webkit-scrollbar {
@@ -202,6 +217,7 @@
         background-color: #c1c1c1;
         border-radius: 6px;
       }
+
       .cms-table-row {
         transition: background-color 0.3s; /* Smooth transition for the background color */
       }
@@ -222,6 +238,24 @@
       }
       div#no_records {
         text-align: center;
+      }
+
+      /*** Custom scrollbar style ****/
+      /* width */
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+
+      /* Track */
+      ::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 5px grey;
+        border-radius: 10px;
+      }
+
+      /* Handle */
+      ::-webkit-scrollbar-thumb {
+        background: gray;
+        border-radius: 10px;
       }
     </style>
   </head>
@@ -397,25 +431,39 @@
     </div>
 
     <div class="cms-records-container" id="cms-records-container">
-      <table class="cms-records" id="cms-records">
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Status</th>
-            <th>Branch</th>
-            <th>Approval Tracker</th>
-            <th>Modified</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Table rows will be dynamically inserted here -->
-        </tbody>
-      </table>
+      <div class="table-wrapper">
+        <table class="cms-records" id="cms-records">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Status</th>
+              <th>Branch</th>
+              <th>Approval Tracker</th>
+              <th>Modified</th>
+              <th>PDF</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Table rows will be dynamically inserted here -->
+          </tbody>
+        </table>
+      </div>
       <div class="no_records" id="no_records" style="display: none"></div>
     </div>
 
     <script>
+      window.onscroll = function () {
+        var header = document.getElementById("list-header");
+        var sticky = header.offsetTop;
+
+        if (window.pageYOffset > sticky) {
+          header.classList.add("fixed"); // Add the fixed class
+        } else {
+          header.classList.remove("fixed"); // Remove the fixed class
+        }
+      };
+
       function searchTable() {
         // Get the search input value
         const input = document
@@ -594,7 +642,17 @@
                     <td>${record.branch || ""}</td>
                     <td>${getStageStatusIcons(record)}</td>
                     <td>${timeAgo(record.modified) || ""}</td>
-                `;
+                    <td>
+    ${
+      record.status === "Approved"
+        ? `
+        <button onclick="getPdf('${record.name}')" style="padding: 5px 10px; border: none; background: transparent; color: white; cursor: pointer;">
+            <img src="/assets/cash_management_system/images/pdf1.png" alt="Get PDF" title="Get PDF" style="width: 40px; height: 40px;">
+        </button>
+        `
+        : ""
+    }
+</td>`;
             tableBody.appendChild(row);
           });
           // Get the no_records div
@@ -630,6 +688,27 @@
           }
         }
         return "";
+      }
+      function getPdf(name) {
+        frappe.call({
+          method:
+            "cash_management_system.cash_management_system.doctype.cms.cms.generate_dynamic_pdf", // Adjust with your actual app and function path
+          args: {
+            docname: name, // Pass the document name (e.g., Employee name) to the function
+          },
+          callback: function (response) {
+            if (response.message) {
+              // Download the PDF
+              const blob = new Blob([response.message], {
+                type: "application/pdf",
+              });
+              const link = document.createElement("a");
+              link.href = window.URL.createObjectURL(blob);
+              link.download = "Document_Details.pdf";
+              link.click();
+            }
+          },
+        });
       }
 
       function getStatusBackground(status) {

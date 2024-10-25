@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Responsive Page</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+      }
+
+      header {
+        background: #4caf50;
+        color: #fff;
+        padding: 20px;
+        text-align: center;
+      }
+
+      nav ul {
+        list-style: none;
+      }
+
+      nav ul li {
+        display: inline;
+        margin: 0 15px;
+      }
+
+      nav ul li a {
+        color: white;
+        text-decoration: none;
+      }
+
+      nav ul li a:hover {
+        text-decoration: underline;
+      }
+
+      main {
+        padding: 20px;
+      }
+
+      section {
+        margin-bottom: 20px;
+        padding: 15px;
+        background: #f4f4f4;
+        border-radius: 5px;
+      }
+
+      footer {
+        text-align: center;
+        padding: 10px;
+        background: #4caf50;
+        color: white;
+        position: relative;
+        bottom: 0;
+        width: 100%;
+      }
+
+      @media (max-width: 600px) {
+        nav ul li {
+          display: block;
+          margin: 10px 0;
+        }
+      }
+    </style>
+  </head>
+  <body id="contentToPDF">
+    <header>
+      <h1>Welcome to My Page</h1>
+      <nav>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+      <section id="home">
+        <h2>Home</h2>
+        <p>This is the home section of the page.</p>
+      </section>
+      <section id="about">
+        <h2>About</h2>
+        <p>Learn more about what we do.</p>
+      </section>
+      <section id="services">
+        <h2>Services</h2>
+        <p>Explore our services.</p>
+      </section>
+      <section id="contact">
+        <h2>Contact</h2>
+        <p>Get in touch with us!</p>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2024 My Website. All rights reserved.</p>
+    </footer>
+  </body>
+</html>
