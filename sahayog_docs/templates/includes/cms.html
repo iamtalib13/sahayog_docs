@@ -258,6 +258,8 @@
         border-radius: 10px;
       }
     </style>
+    <script src="/assets/frappe/js/frappe-web.min.js"></script>
+    <script src="/assets/frappe/js/frappe.min.js"></script>
   </head>
   <body>
     <header class="cms-header">
@@ -689,26 +691,48 @@
         }
         return "";
       }
-      function getPdf(name) {
-        frappe.call({
-          method:
-            "cash_management_system.cash_management_system.doctype.cms.cms.generate_dynamic_pdf", // Adjust with your actual app and function path
-          args: {
-            docname: name, // Pass the document name (e.g., Employee name) to the function
-          },
-          callback: function (response) {
-            if (response.message) {
-              // Download the PDF
-              const blob = new Blob([response.message], {
-                type: "application/pdf",
-              });
-              const link = document.createElement("a");
-              link.href = window.URL.createObjectURL(blob);
-              link.download = "Document_Details.pdf";
-              link.click();
+
+      async function getPdf(name) {
+        console.log("Starting PDF generation for:", name);
+
+        try {
+          const response = await fetch(
+            `/api/method/cash_management_system.cash_management_system.doctype.cms.cms.generate_dynamic_pdf`,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ name: name }), // Ensure you pass 'name' correctly
             }
-          },
-        });
+          );
+
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+
+          const blob = await response.blob();
+          const url = window.URL.createObjectURL(blob);
+
+          // Open the PDF in a new tab for preview
+          window.open(url);
+
+          // Set the filename based on the 'name' parameter
+          const filename = `${name}_Document_Details.pdf`; // Use the same naming convention as the server
+
+          // Create a download link
+          const downloadLink = document.createElement("a");
+          downloadLink.href = url;
+          downloadLink.download = filename; // Set the dynamically generated filename
+          downloadLink.innerText = "Download PDF"; // Add a text link for downloading if needed
+
+          // Append the link to the document, trigger the download, and remove the link
+          document.body.appendChild(downloadLink);
+          downloadLink.click(); // Automatically trigger download if you want
+          document.body.removeChild(downloadLink); // Clean up the link
+        } catch (error) {
+          console.error("Error generating PDF:", error);
+        }
       }
 
       function getStatusBackground(status) {
