@@ -1,0 +1,29 @@
+<div class="type-block-content">
+  <div class="time-filter">
+    {% include "/templates/includes/time_filter.html" %}
+  </div>
+  <div class="container-fluid pt-2">
+    <div class="row" id="doc-list">
+      {% if current_type == "Circular" %} {% for item in circulars %} {% include
+      "cards.html" with context %} {% endfor %} {% elif current_type == "Forms &
+      Formats" %} {% for item in forms_formats %} {% include "cards.html" with
+      context %} {% endfor %} {% elif current_type == "Process & Policies" %} {%
+      for item in policies %} {% include "cards.html" with context %} {% endfor
+      %} {% else %}
+      <div>No records found.</div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".card-text").forEach((element) => {
+      const dateText = element.innerText;
+      if (/^\d{4}-\d{2}-\d{2}$/.test(dateText)) {
+        const parts = dateText.split("-");
+        element.innerText = `${parts[2]}-${parts[1]}-${parts[0]}`;
+      }
+    });
+  });
+</script>

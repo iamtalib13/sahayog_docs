@@ -17,43 +17,11 @@ class Circular(Document):
     pass
 
 
-@frappe.whitelist(allow_guest=True)
-def get_list(doc_type=None):
-    filters = {}
-    if doc_type:
-        filters["type"] = doc_type
+import frappe
 
-    circulars = frappe.db.get_all(
-        "Circular",
-        filters=filters,
-        fields=[
-            "name",
-            "circular_name",
-            "year",
-            "date",
-            "circular_id",
-            "circular_doc",
-            "type",
-        ],
-        order_by="date desc",
-    )
-
-    for circular in circulars:
-        if circular["date"]:
-            circular["date"] = getdate(circular["date"]).strftime("%d-%m-%Y")
-
-    if not circulars:
-        html_content = "<p>No data found for the selected filters.</p>"
-    else:
-        html_content = frappe.render_template(
-            "templates/includes/cards.html", {"circulars": circulars}
-        )
-
-    return Response(html_content)
-
-
-@frappe.whitelist(allow_guest=True)
-def get_time_list(year=None, month=None):
+# Function to get the list of circulars based on the type - circular or process & policies
+@frappe.whitelist()
+def get_list(year=None, month=None, doc_type=None):
     filters = {}
 
     if year:
@@ -61,6 +29,13 @@ def get_time_list(year=None, month=None):
 
     if month:
         filters["month"] = month
+    
+    # If a specific doc_type is provided, filter by it
+    if doc_type in ["Circular", "Process & Policies"]:
+        filters["type"] = doc_type
+    else:
+        # If no doc_type or "All" is passed, fetch both
+        filters["type"] = ["in", ["Circular", "Process & Policies"]]
 
     circulars = frappe.get_all(
         "Circular",
@@ -90,6 +65,125 @@ def get_time_list(year=None, month=None):
         )
 
     return Response(html_content)
+
+@frappe.whitelist(allow_guest=True)
+def get_time_list(year=None, month=None):
+    filters = {}
+
+    if year:
+        filters["year"] = year
+
+    if month:
+        filters["month"] = month
+        
+    circulars = frappe.get_all(
+        "Circular",
+        filters=filters,
+        fields=[
+            "name",
+            "circular_name",
+            "year",
+            "month",
+            "date",
+            "circular_id",
+            "circular_doc",
+            "type",
+        ],
+        order_by="date desc",
+    )
+    for circular in circulars:
+        if circular["date"]:
+            circular["date"] = getdate(circular["date"]).strftime("%d-%m-%Y")
+    if not circulars:
+        html_content = "<p>No data found for the selected filters.</p>"
+    else:
+        html_content = frappe.render_template(
+            "templates/includes/cards.html", {"circulars": circulars}
+        )
+    return Response(html_content)
+
+
+# Function to get the list of circulars based on the type - Forms & Formats
+@frappe.whitelist(allow_guest=True)
+def get_forms_formats(year=None, month=None, doc_type=None):
+    filters = {}
+
+    if year:
+        filters["year"] = year
+
+    if month:
+        filters["month"] = month
+    
+    if doc_type == "Forms & Formats":
+        filters["type"] = doc_type
+    else:
+        # If no doc_type or "All" is passed, fetch Forms & Formats
+        filters["type"] = "Forms & Formats"
+        
+    forms_formats = frappe.get_all(
+        "Circular",
+        filters=filters,
+        fields=[
+            "name",
+            "circular_name",
+            "year",
+            "month",
+            "date",
+            "circular_id",
+            "circular_doc",
+            "type",
+        ],
+        order_by="date desc",
+    )
+    for circular in forms_formats:
+        if circular["date"]:
+            circular["date"] = getdate(circular["date"]).strftime("%d-%m-%Y")
+    if not forms_formats:
+        html_content = "<p>No data found for the selected filters.</p>"
+    else:
+        html_content = frappe.render_template(
+            "templates/includes/cards.html", {"circulars": forms_formats}
+        )
+    return Response(html_content)
+
+@frappe.whitelist(allow_guest=True)
+def get_time_list_forms_format(year=None, month=None):
+    filters = {}
+
+    if year:
+        filters["year"] = year
+
+    if month:
+        filters["month"] = month
+        
+    forms_formats = frappe.get_all(
+        "Circular",
+        filters={**filters, "type": "Forms & Formats"},
+        fields=[
+            "name",
+            "circular_name",
+            "year",
+            "month",
+            "date",
+            "circular_id",
+            "circular_doc",
+            "type",
+        ],
+        order_by="date desc",
+    )
+    for circular in forms_formats:
+        if circular["date"]:
+            circular["date"] = getdate(circular["date"]).strftime("%d-%m-%Y")
+    if not forms_formats:
+        html_content = "<p>No data found for the selected filters.</p>"
+    else:
+        html_content = frappe.render_template(
+            "templates/includes/form_cards.html", {"circulars": forms_formats}
+        )
+    return Response(html_content)
+
+    
+
 
 
 # get current user name

@@ -1,0 +1,31 @@
+<!-- ✅ Fetch circulars with type = "Forms & Formats" -->
+{% set circulars = frappe.db.get_all( "Circular", filters={"type": "Forms &
+Formats"}, fields=["name", "circular_name", "year", "date", "circular_id",
+"circular_doc", "type"], order_by="date desc" ) %}
+
+<!-- ✅ Loop through and display the filtered circulars -->
+{% if circulars %} {% for circular in circulars %}
+<div class="col-lg-3 col-md-6 mb-2 mr-2">
+  <div class="card">
+    <a
+      href="{{ circular.circular_doc }}"
+      target="_blank"
+      style="text-decoration: none; color: inherit"
+    >
+      <div class="card_header circular-header">
+        <span class="view_doc circular-view-doc">{{ circular.type }}</span>
+      </div>
+      <div class="card_body">
+        <div class="card-title">{{ circular.circular_name }}</div>
+      </div>
+    </a>
+  </div>
+  <div class="card_content text-white">
+    <p class="card-text" id="year">{{ circular.year }}</p>
+    <span class="dot">·</span>
+    <p class="card-text date">{{ circular.date }}</p>
+  </div>
+</div>
+{% endfor %} {% else %}
+<p class="text-muted">No circulars found with type "Forms & Formats".</p>
+{% endif %}

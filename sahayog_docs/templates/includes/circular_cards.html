@@ -1,0 +1,16 @@
+<div class="row">
+  {% for doc in frappe.get_all('Circular', fields=['name', 'title', 'type',
+  'creation'], order_by='creation desc', limit=10) %}
+  <div class="col-md-4 mb-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{ doc.title }}</h5>
+        <p class="card-text">Type: {{ doc.type }}</p>
+        <p class="card-text">
+          <small class="text-muted">{{ doc.creation }}</small>
+        </p>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>

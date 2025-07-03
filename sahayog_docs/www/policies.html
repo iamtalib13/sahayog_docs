@@ -354,8 +354,10 @@
       }
 
       .right-container {
-        padding: 0;
-        height: 100vh;
+        height: 100vh; /* Full viewport height */
+        overflow-y: auto; /* Enable vertical scrolling */
+        overflow-x: hidden; /* Hide horizontal scrollbar if any */
+        padding: 1rem; /* optional, for spacing */
       }
 
       /* Style adjustments for smaller screens */
@@ -371,7 +373,6 @@
         }
       }
     </style>
-
     <script>
       // Function to handle button clicks
       function handleFilterButtonClick(button) {
@@ -524,18 +525,12 @@
                     </div>
                   </div>
                 </li>
-                <!-- <li class="nav-item">
-                    <a class="nav-link create_forms" href="#">
-                      <span
-                        ><img class="forms" src="/files/writing (1).png" alt=""
-                      /></span>
-                      Forms & Formats</a
-                    >
-                  </li> -->
               </ul>
             </nav>
           </div>
         </div>
+       
+
         <!-- Content Section (Right) -->
         <div class="col-md-10 col-12 right-container">
           <div class="cms-container" id="cms-container" style="display: none">
@@ -545,9 +540,8 @@
             class="formsFormat-container"
             id="formsFormat-container"
             style="display: none"
-          >
-            <h1>There is no Forms And Format</h1>
-          </div>
+          >  {% include "/templates/includes/forms_format.html" %}
+        </div>
           <div class="policy-container" id="policy-container">
             <div class="header">
               <div id="filter-bar">
@@ -632,7 +626,7 @@
               <div class="time-filter">
                 {% include "/templates/includes/time_filter.html" %}
               </div>
-              <div class="container-fluid">
+              <div class="container-fluid pt-2">
                 <div class="row" id="doc-list">
                   {% include "/templates/includes/cards.html" %}
                 </div>
@@ -679,9 +673,10 @@
         } else if (tabName === "forms") {
           document.getElementById("formsFormat-container").style.display =
             "block";
+          
         } else if (tabName === "circular") {
           document.getElementById("policy-container").style.display = "block";
-
+         
           // Find and activate the "All" nav tab
           const allButton = document.querySelector(".btn-filter:first-of-type");
           if (allButton) {
@@ -762,48 +757,6 @@
           ).doc_type;
         }
       });
-
-      /********************* Sidebar Script *********************/
-      // const sideButtons = document.querySelectorAll(".side_btn");
-
-      /*function handleButtonClick(event) {
-         // Hide all containers
-         document.getElementById("cms-container").style.display = "none";
-         document.getElementById("formsFormat-container").style.display = "none";
-         document.getElementById("policy-container").style.display = "none";
-
-         // Remove 'active' class from all buttons
-         sideButtons.forEach((button) => {
-           button.classList.remove("active");
-           const img = button.querySelector("img");
-           img.src = button.dataset.inactiveSrc; // Set to inactive icon
-         });
-
-         // Show the clicked button's container and update icon
-         const clickedButton = event.currentTarget;
-         clickedButton.classList.add("active");
-         const clickedImg = clickedButton.querySelector("img");
-         clickedImg.src = clickedButton.dataset.activeSrc; // Set to active icon
-
-         // Display corresponding container
-         if (clickedButton.id === "cms-btn") {
-           document.getElementById("cms-container").style.display = "block";
-         } else if (clickedButton.id === "forms-btn") {
-           document.getElementById("formsFormat-container").style.display =
-             "block";
-         } else if (clickedButton.id === "circular-btn") {
-           document.getElementById("policy-container").style.display = "block";
-           // Find and activate the "All" nav tab
-           const allButton = document.querySelector(".btn-filter:first-of-type");
-           if (allButton) {
-             allButton.click(); // Programmatically click the "All" button
-           }
-         }
-       }
-
-       sideButtons.forEach((button) => {
-         button.addEventListener("click", handleButtonClick);
-       });  */
 
       // Redirect on home page
       document

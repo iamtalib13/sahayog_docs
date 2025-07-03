@@ -29,7 +29,7 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Year",
-   "options": "\n2024-25\n2023-24\n2022-23\n2021-22\n2020-21\n2019-20\n2018-19",
+   "options": "2025-26\n2024-25\n2023-24\n2022-23\n2021-22\n2020-21\n2019-20\n2018-19",
    "reqd": 1
   },
   {
@@ -112,7 +112,7 @@
  "hide_toolbar": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-10-16 12:50:33.789883",
+ "modified": "2025-05-21 13:42:23.571653",
  "modified_by": "Administrator",
  "module": "Circulars",
  "name": "Circular",

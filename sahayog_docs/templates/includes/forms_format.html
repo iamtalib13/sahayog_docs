@@ -1,1 +1,114 @@
-<div>In Processing</div>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Forms & Formats</title>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <!-- <div class="row">
+        <form
+          id="year-month-form"
+          hx-get="/api/method/sahayog_docs.circulars.doctype.circular.circular.get_time_list_forms_format"
+          hx-vals='js:{year: document.getElementById("yearSelect").value, month: document.getElementById("monthSelect").value}'
+          hx-target="#forms-format-list"
+          hx-trigger="change from:select"
+        >
+          <div class="row pb-3">
+            <div class="col-auto">
+              <select
+                class="form-select form-select-sm custom-select"
+                name="year"
+                id="yearSelect"
+                aria-label="Year select"
+              >
+                <option value="" selected>Year</option>
+                <option value="2025-26">2025-26</option>
+                <option value="2024-25">2024-25</option>
+                <option value="2023-24">2023-24</option>
+                <option value="2022-23">2022-23</option>
+                <option value="2021-22">2021-22</option>
+                <option value="2020-21">2020-21</option>
+                <option value="2019-20">2019-20</option>
+                <option value="2018-19">2018-19</option>
+              </select>
+            </div>
+            <div class="col-auto">
+              <select
+                class="form-select form-select-sm custom-select"
+                name="month"
+                id="monthSelect"
+                aria-label="Month select"
+              >
+                <option value="" selected>Month</option>
+                <option value="01">January</option>
+                <option value="02">February</option>
+                <option value="03">March</option>
+                <option value="04">April</option>
+                <option value="05">May</option>
+                <option value="06">June</option>
+                <option value="07">July</option>
+                <option value="08">August</option>
+                <option value="09">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+              </select>
+            </div>
+          </div>
+        </form>
+      </div> -->
+      <div class="row py-3" id="forms-format-list">
+        <!-- ✅ Fetch circulars with type = "Forms & Formats" -->
+        {% set circulars = frappe.db.get_all( "Circular", filters={"type":
+        "Forms & Formats"}, fields=["name", "circular_name", "year", "date",
+        "circular_id", "circular_doc", "type"], order_by="date desc" ) %}
+
+        <!-- ✅ Loop through and display the filtered circulars -->
+        {% if circulars %} {% for circular in circulars %}
+        <div class="col-lg-3 col-md-6 mb-2 mr-2">
+          <div class="card">
+            <a
+              href="{{ circular.circular_doc }}"
+              target="_blank"
+              style="text-decoration: none; color: inherit"
+            >
+              <div class="card_header circular-header">
+                <span class="view_doc circular-view-doc"
+                  >{{ circular.type }}</span
+                >
+              </div>
+              <div class="card_body">
+                <div class="card-title">{{ circular.circular_name }}</div>
+              </div>
+            </a>
+          </div>
+          <div class="card_content text-white">
+            <p class="card-text" id="year">{{ circular.year }}</p>
+            <span class="dot">·</span>
+            <p class="card-text date">{{ circular.date }}</p>
+          </div>
+        </div>
+        {% endfor %} {% else %}
+        <p class="text-muted">
+          No circulars found with type "Forms & Formats".
+        </p>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- ✅ JS: Format date from YYYY-MM-DD to DD-MM-YYYY -->
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll(".card-text").forEach((element) => {
+          const dateText = element.innerText.trim();
+          if (/^\d{4}-\d{2}-\d{2}$/.test(dateText)) {
+            const parts = dateText.split("-");
+            element.innerText = `${parts[2]}-${parts[1]}-${parts[0]}`;
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
