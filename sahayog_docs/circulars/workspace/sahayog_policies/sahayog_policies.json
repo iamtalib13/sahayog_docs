@@ -12,7 +12,7 @@
  "is_hidden": 0,
  "label": "Sahayog Policies",
  "links": [],
- "modified": "2025-04-23 17:45:40.523670",
+ "modified": "2026-07-07 13:05:50.869540",
  "modified_by": "Administrator",
  "module": "Circulars",
  "name": "Sahayog Policies",
@@ -95,6 +95,20 @@
    "color": "Grey",
    "doc_view": "List",
    "label": "2024-25",
+   "link_to": "Circular",
+   "stats_filter": "[[\"Circular\",\"year\",\"=\",\"2024-25\",false]]",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "2025-26",
+   "link_to": "Circular",
+   "stats_filter": "[[\"Circular\",\"year\",\"=\",\"2025-26\",false]]",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "List",
+   "label": "2026-27",
    "link_to": "Circular",
    "stats_filter": "[]",
    "type": "DocType"
